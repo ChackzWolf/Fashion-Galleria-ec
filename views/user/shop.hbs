@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FashionGalleria | shop</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS for transparent heart with border -->
+
+    
+
+        <style>
+        /* Style the dropdown container */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Style the button that will open the dropdown */
+        .user-btn {
+            background-color: #ffffff;
+            color: rgb(31, 30, 30);
+            padding: 10px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style the dropdown content (hidden by default) */
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #ffffff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+
+            width:max-content;
+            right: 0;
+        }
+
+        /* Style the individual items in the dropdown */
+        .user-dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color on hover */
+        .user-dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown when hovering over the container */
+        .user-dropdown:hover .user-dropdown-content {
+            display: block;
+        }
+    </style>
+ 
+  <!-- Custom CSS for transparent heart with border -->
+  <style>
+    .IconColor {
+      border: 2px solid rgb(47, 47, 47);
+    }
+  </style>
+  
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+<!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__logo">     
+            {{!-- <a href="/index"><img src="img/logo.svg" alt=""></a> --}}
+        </div>
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            {{!-- <li><span class="icon_search search-switch"></span></li> --}}
+            <li>
+                <a href="/wishlist"><i class="fas fa-heart"></i></a>
+            </li>
+            <li>
+                <a href="/cart"><i class="fas fa-shopping-bag"></i>
+                <div class="tip">2</div></a>
+            </li>
+        </ul>
+
+        <div id="mobile-menu-wrap"></div>
+        {{!-- <div class="offcanvas__auth">
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div> --}}
+    </div>
+    <!-- Offcanvas Menu End --> 
+    
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2">
+                    <div style="max-height: 100px; max-width:400px">
+                        <a href="/"><img src="img/logo.svg" alt=""></a>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-3">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="scroll-to-section"><a href="/" class="active">Home</a></li>
+                             
+
+                            
+                            <li><a href="/shop">Shop</a></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="/orders">View orders</a></li>
+                           
+                                </ul>
+                            </li>
+                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="contianer col-xl-3">
+                    <div class="TopHeader" id="TopHeader">
+                        <!-- search input box start -->
+                        <div class="InputBox" id="inputBar">
+                            <input class="input-searchbar" type="search" placeholder="Search" id="SearchInput"
+                                autocomplete="off">
+                            <div class="SearchIcon">
+                                <i class="fa fa-search"></i>
+                            </div>
+                            <!-- search result dropdown box start -->
+                            <ul class="SearchResult resultBox" id="ResultBox">
+
+                            </ul>
+                            <!-- search result dropdown box End -->
+                        </div>
+                        <!-- search input box End -->
+                    </div>
+                </div>  
+                <div class="col-lg-3 col-xl-3">
+                    <div class="header__right">
+
+
+                        <ul class="header__right__widget">
+                            <li><a href="#"><i class="fas fa-heart"></i>
+                            </a></li>
+                            <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
+                                <div class="tip">2</div>
+                            </a></li>
+                            <li>
+                                   <!-- User icon dropdown container -->
+                                <div class="user-dropdown">
+                                    <!-- Button to open the dropdown -->
+                                    <button class="user-btn"><i class="fas fa-user"></i></button>
+                                    <!-- Dropdown content -->
+                                    <div class="user-dropdown-content">
+                                        <!-- Individual items with icons -->
+                                        <a href="/user-profile"><i class="fas fa-user">  Profile</i></a>
+                                        {{!-- <a href="#"><i class="fas fa-cog"></i></a> --}}
+                                        <a href="/userLogout"><i class="fas fa-sign-out-alt">  Logout</i></a>
+                                    </div>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                        <span>Shop</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Section Begin -->
+    <section class="shop spad product">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <form action="/shop" method="get">
+                     <div class="shop__sidebar">
+                        <div class="sidebar__categories">
+                            <div class="section-title">
+                                <h4>Categories</h4>
+                            </div>
+<div class="size__list">
+    <ul>
+        <a href="/shop"><li style="display: block; margin-bottom: 5px; color:black"  class="active" data-filter="*">All</li></a>
+        {{#each categoryName}}
+        <li style="display: block; margin-bottom: 5px;">
+            <label for="{{name}}">
+                {{name}}
+                <input type="checkbox" name="category" value="{{_id}}" id="{{name}}">
+                <span class="checkmark"></span>
+            </label>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+
+
+
+                        </div>
+                        <div class="sidebar__filter">
+                            <div class="section-title">
+                                <h4>Shop by price</h4>
+                            </div>
+                            <div class="filter-range-wrap">
+                                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                                data-min="1000" data-max="2000"></div>
+                                <div class="range-slider">
+                                    <div class="price-input" style="width: 500px;">
+                                          <input type="text" value="{{minAmount}}" id="minamount" name="minamount">
+                                        <input type="text" id="maxamount" value="{{minAmount}}" name="maxamount">
+                                    </div>
+                                </div>
+                            </div><br><br>
+                        </div>
+ 
+
+
+
+
+
+                    </div>
+                      <button type="submit" class="btn btn-danger">Filter</button>
+                    </form>
+                </div>
+                <div class="col-lg-9 col-md-9">
+                    {{!-- <div class="row"> --}}
+
+                       
+                        
+                        <div class="row property__gallery" >
+                        {{#each products}}
+                            <a>
+                            <div class=" col-lg-4 col-md-6  product__item mix {{category}}">
+                                <div class="product__item__pic set-bg" >
+                                    <a href="/product-details?id={{this.id}}" > <img src="uploaded-images/{{imageUrl.[1]}}" alt="" href="/product-details?id={{this.id}}"></a>
+                                    {{#if (gt offerPrice 0)}}
+                                    <div class="label new">On sale</div>
+                                    {{/if}}
+                                    <ul class="product__hover">
+                                        <li><a href="img/shop/shop-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                        <li><a href="#"><span class="icon_heart_alt fas fa-heart"></span></a></li>
+                                        <li><a href="/product-details?id={{this.id}}"><span class="icon_bag_alt fas fa-shopping-bag"></span></a></li>
+                                    </ul>
+                                    
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>{{name}}</h6>
+                                    
+                                    <div class="rating">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                      
+                                    </div>
+                                    <div>
+                                    
+                                    {{#if (gt offerPrice 0)}}
+                                        <div class="product__price"><del style="font-size: small;"><small>₹{{price}}</small></del>  ₹ {{offerPrice}}</div>
+                                    {{else}}
+                                        <div class="product__price">₹ {{price}}</div>
+                                    {{/if}}
+
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        {{/each}}  
+                        </div>
+                        
+
+                    {{!-- </div> --}}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+
+    <!-- Instagram Begin -->
+    <div class="instagram">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-1.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-2.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-3.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-4.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-5.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
+                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-6.jpg">
+                        <div class="instagram__text">
+                            <i class="fa fa-instagram"></i>
+                            <a href="#">@ ashion_shop</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Instagram End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-7">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                        cilisis.</p>
+                        <div class="footer__payment">
+                            <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-3.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-4.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-5.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-5">
+                    <div class="footer__widget">
+                        <h6>Quick links</h6>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Blogs</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="footer__widget">
+                        <h6>Account</h6>
+                        <ul>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Orders Tracking</a></li>
+                            <li><a href="#">Checkout</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-8 col-sm-8">
+                    <div class="footer__newslatter">
+                        <h6>NEWSLETTER</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Email">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div class="footer__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <div class="footer__copyright__text">
+                        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
+                    </div>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- <!-- Js Plugins -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/mixitup.min.js"></script>
+<script src="js/jquery.countdown.min.js"></script>
+<script src="js/jquery.slicknav.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.nicescroll.min.js"></script>
+<script src="js/main.js"></script>
+
+
+{{!-- this is hexxx js --}}
+
+    <!-- jQuery -->
+    <script src="assets/js/jquery-2.1.0.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="assets/js/popper.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- Plugins -->
+    <script src="assets/js/owl-carousel.js"></script>
+    <script src="assets/js/accordions.js"></script>
+    <script src="assets/js/datepicker.js"></script>
+    <script src="assets/js/scrollreveal.min.js"></script>
+    <script src="assets/js/waypoints.min.js"></script>
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <script src="assets/js/imgfix.min.js"></script> 
+    <script src="assets/js/slick.js"></script> 
+    <script src="assets/js/lightbox.js"></script> 
+    <script src="assets/js/isotope.js"></script> 
+    
+    <!-- Global Init -->
+    <script src="assets/js/custom.js"></script>
+
+    <script>
+
+    $(function() {
+        var selectedClass = "";
+        $("p").click(function(){
+        selectedClass = $(this).attr("data-rel");
+        $("#portfolio").fadeTo(50, 0.1);
+            $("#portfolio div").not("."+selectedClass).fadeOut();
+        setTimeout(function() {
+          $("."+selectedClass).fadeIn();
+          $("#portfolio").fadeTo(50, 1);
+        }, 500);
+            
+        });
+    });
+
+    const searchInput = document.querySelector(".InputBox");
+    const input = searchInput.querySelector("input");
+    const resultBox = searchInput.querySelector(".resultBox");
+    var SearchResult = document.getElementById("ResultBox");
+    let webLink;
+
+    // if user press any key and release
+    input.onkeyup = (e) => {
+        let userData = e.target.value; //user enetered data
+        let emptyArray = [{}];
+        if (userData) {
+            $.ajax({
+                url: '/search',
+                type: 'GET',
+                data: { search: userData },
+                success: function (data) {
+                    if (data.length > 0) {
+
+                        emptyArray = data.map(function (val) {
+                            return (val);
+                        });
+
+                        emptyArray = emptyArray.map((data) => {
+
+
+                            // passing return data inside li tag
+                            return data = '<li> <a href="/product-details?id=' + data._id + '">' + data.name + '</a></li>';
+                        });
+
+                        SearchResult.style.display = "block"; //show autocomplete box
+                        showSuggestions(emptyArray);
+                        let allList = resultBox.querySelectorAll("li");
+                        for (let i = 0; i < allList.length; i++) {
+                            //adding onclick attribute in all li tag
+                            allList[i].setAttribute("onclick", "select(this)");
+                        }
+                    } else {
+
+                        data = '<ul> </ul>';
+                        resultBox.innerHTML = data;
+                    }
+                }
+            })
+        }
+        else {
+            SearchResult.style.display = "none"; //hide autocomplete box
+        }
+    }
+
+    const elem = document.getElementById('inputBar')
+    elem.onmouseover = function () {
+        SearchResult.style.display = "block";
+    }
+
+
+    elem.onmouseout = function () {
+        SearchResult.style.display = "none";
+    }
+
+    function showSuggestions(list) {
+        let listData;
+        if (!list.length) {
+            userValue = inputBox.value;
+            return data = '<ul>' + data + '</ul>';
+        } else {
+            listData = list.join('');
+        }
+        resultBox.innerHTML = listData;
+    }
+
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get all checkboxes with name "category"
+        var checkboxes = document.querySelectorAll('input[name="category"]');
+        
+        // Get the category value from the server-side variable or wherever it's stored
+        var categoryValue = "{{category}}"; // Replace "{{category}}" with the actual value
+        console.log('category value', categoryValue);
+        
+        // Convert categoryValue to an array if it's a comma-separated string
+        if (categoryValue.includes(',')) {
+            categoryValue = categoryValue.split(',');
+        }
+
+        // Loop through each checkbox
+        checkboxes.forEach(function(checkbox) {
+            // Check if categoryValue is an array
+            if (Array.isArray(categoryValue)) {
+                console.log('if');
+                // Check if the checkbox value is included in the category array
+                if (categoryValue.includes(checkbox.value)) {
+                    checkbox.checked = true;
+                }
+                console.log('issssssssssss');
+            } else {
+                console.log('else');
+                // Check if the checkbox value matches the category value
+                if (checkbox.value === categoryValue) {
+                    checkbox.checked = true; // If match, check the checkbox
+                }
+            }
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the current values for minamount and maxamount from the backend
+        var minAmountValue = "{{minAmount}}"; // Replace "{{minamount}}" with the actual value
+        var maxAmountValue = "{{maxAmount}}"; // Replace "{{maxamount}}" with the actual value
+        
+        // Set the current values for minamount and maxamount inputs
+        document.getElementById("minamount").value = minAmountValue;
+        document.getElementById("maxamount").value = maxAmountValue;
+    });
+
+    </script>    
+</body>
+
+</html>

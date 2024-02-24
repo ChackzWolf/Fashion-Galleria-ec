@@ -1,0 +1,63 @@
+.search-form {
+    position: relative; /* This allows the searchResults to be positioned relative to this container */
+  }
+  
+  #searchResults {
+    position: absolute; /* Position the searchResults absolutely within the search-form */
+    top:  100%; /* Position it just below the search-form */
+    left:  0; /* Align it to the left edge of the search-form */
+    width:  100%; /* Make it the same width as the search-form */
+    background-color: #fff; /* Set a background color for the dropdown */
+    border:  1px solid #ccc; /* Add a border around the dropdown */
+    border-top: none; /* Remove the top border to make it look connected to the search input */
+    z-index:  1000; /* Ensure it appears above other content */
+    padding-left:  5px; /* Add some padding inside the dropdown */
+    box-shadow:  0  2px  4px rgba(0,  0,  0,  0.1); /* Add a subtle shadow for depth */
+  }
+  
+  #searchResults p {
+    margin:  0; /* Remove default margin from paragraphs */
+    padding:  5px  0; /* Add some vertical padding to each result */
+  }
+  
+  #searchResults hr {
+    border: none;
+    border-top:  1px solid #ccc; /* Add a horizontal line between results */
+    margin:  5px  0; /* Add some margin to separate the lines */
+  }
+
+
+
+
+
+
+
+
+
+  #searchResults .search-result-item {
+    display: flex; /* Use flexbox to easily align items */
+    justify-content: space-between; /* Align items to the left and right */
+    align-items: center; /* Vertically align items in the center */
+    padding:  5px  10px; /* Add some padding around each item */
+  }
+  
+  #searchResults .search-result-item p {
+    margin:  0; /* Remove default margin from paragraphs */
+    flex-grow:  1; /* Allow the paragraph to take up remaining space */
+  }
+  
+  #searchResults .search-result-item button {
+    /* Style the button as needed */
+    background-color: #007bff; /* Blue background */
+    color: #fff; /* White text */
+    border: none; /* Remove default border */
+    border-radius:  4px; /* Rounded corners */
+    padding:  5px  10px; /* Add some padding */
+    margin-left: 5px;
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color  0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  #searchResults .search-result-item button:hover {
+    background-color: #0056b3; /* Darken background on hover */
+  }

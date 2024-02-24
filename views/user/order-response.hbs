@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Urban Vogue</title>
+
+    <link href="assets/img/favicon.png" rel="icon">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+     <link rel="stylesheet" href="css/order-response.css" type="text/css">
+</head>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('id');
+
+      
+      if (orderId) {
+        const orderSpan = document.querySelector('.order');
+        orderSpan.innerText = `Order - ${orderId}`;
+      }
+    });
+</script>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+<!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__logo">     
+            {{!-- <a href="/index"><img src="img/logo.svg" alt=""></a> --}}
+        </div>
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            {{!-- <li><span class="icon_search search-switch"></span></li> --}}
+            <li>
+                <a href="/wishlist"><i class="fas fa-heart"></i></a>
+            </li>
+            <li>
+                <a href="/cart"><i class="fas fa-shopping-bag"></i>
+                <div class="tip">2</div></a>
+            </li>
+        </ul>
+
+        <div id="mobile-menu-wrap"></div>
+        {{!-- <div class="offcanvas__auth">
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div> --}}
+    </div>
+    <!-- Offcanvas Menu End --> 
+
+ <header class="header-area header-sticky">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2" style="padding:0%">
+                    <div style="max-height: 100px; max-width:400px">
+                        <a href="/"><img src="img/logo.svg" alt=""></a>
+                    </div>
+                </div>
+                {{!-- <div class="col-xl-3 col-lg-2" style="padding: 0% !important">
+                    <div class="header__logo" style="max-height:100px max-width:200px padding:0% !important">
+                        <a href="/"><img src="img/logo.svg" alt="fashionGaballeria" style="padding: 0% !important" ></a>
+                    </div>
+                </div> --}}
+
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+
+
+
+
+
+<div class="container d-flex justify-content-center pt-5 card-margin-top">
+       <div class="card p-4 mt-3">
+          <div class="first d-flex justify-content-between align-items-center mb-3">
+            <div class="info">
+                {{!-- <span class="d-block name">Thank you, {{user.fullname}}</span> --}}
+                <span class="order text-success">Order -{{id}}</span>
+                  <span class="order">Use this order id for further need</span>
+            </div>
+           
+             <img src="https://i.imgur.com/NiAVkEw.png" width="40"/>
+              
+
+          </div>
+              <div class="detail">
+          <span class="d-block summery">Your order has been dispatched. we are delivering you order.</span>
+              </div>
+          <hr>
+          <div class="text">
+        {{!-- <span class="d-block new mb-1" >{{user.fullname}}</span> --}}
+         </div>
+        {{!-- <span class="d-block address mb-3">{{user.permanentaddress}}</span> --}}
+          <div class="  money d-flex flex-row mt-2 align-items-center">
+            <img src="https://i.imgur.com/ppwgjMU.png" width="20" />
+        
+        {{#if cod}}
+         <span class="ml-2">Cash on Delivery</span>
+        {{else}}
+        <span class="ml-2">Paid Online</span>
+        {{/if}}
+               </div>
+               <div  class="last d-flex align-items-center mt-3">
+                <a class=" btn address-line" href="/orders">
+                <span class="address-line">View Orders</span>
+                </a>
+               </div>
+
+               <div  class="last d-flex align-items-center mt-3">
+                <a class=" btn address-line" href="/">
+                <span class="address-line">Back to Home</span>
+                </a>
+               </div>
+        </div>
+    </div>
+
+    </section>
+    <!-- Checkout Section End -->
+
+
+<script>
+           console.log(response.onlineDetails.orderId)
+</script>
+
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

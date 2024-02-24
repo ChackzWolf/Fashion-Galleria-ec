@@ -1,0 +1,70 @@
+
+
+
+/* Your CSS code here */
+.toggle-sidebar-btn {
+    display: none; /* Hide the button by default */
+}
+/* Media query for smaller screens (e.g., mobile) */
+@media (max-width: 992px) {
+    .toggle-sidebar-btn {
+        display: block; /* Show the button on smaller screens */
+        /* Add additional styles as needed */
+    }
+}
+
+
+/* Basic styles for the sidebar */
+.sidebar {
+    width: 300px; /* Adjust the width as needed */
+    background-color: #f0f0f0; /* Sidebar background color */
+    position: fixed;
+    top: 50px;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease; /* Add transition effect for smooth animation */
+    transform: translateX(-100%); /* Initially hide the sidebar off-screen */
+}
+
+/* Show class to display the sidebar */
+.sidebar.show {
+    transform: translateX(0); /* Move the sidebar into view */
+}
+
+/* Styles for the close button */
+.close-sidebar-btn {
+    display: none; /* Initially hide the close button */
+}
+
+/* Media query to adjust sidebar and show close button on screens smaller than 992px */
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 100%; /* Make sidebar full width on smaller screens */
+    }
+
+    .close-sidebar-btn {
+        display: block; /* Show the close button */
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1001; /* Ensure the button is above the sidebar content */
+    }
+}
+
+/* Media query to show sidebar on screens larger than 992px */
+@media (min-width: 992px) {
+    .sidebar {
+        transform: translateX(0); /* Show the sidebar on desktop screens */
+    }
+}
+/* Basic styles for the header */
+.header {
+    width: 100%;
+    height: 60px; /* Adjust the height as needed */
+    background-color: #ffffff; /* Example background color for the header */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001; /* Ensure the header is above the sidebar */
+}
