@@ -981,11 +981,10 @@ const userProfile = async(req,res)=>{
         const userId = req.session.user._id
         const userDetails = await UserModel.findById({_id:userId});
         const newAddress = await AddressModel.findOne({userId:userId});
-        if(newAddress){
-            console.log('userProfile',newAddress.address)
+        // if(newAddress){
             const cartCount = await userFunc.getCartCount(userId);
             res.render('user/user-profile',{userDetails,newAddress,cartCount});
-        }
+        // }
      } catch (error) {
          console.error("Error in changeProductQuantity:", error);
          res.status(500).json({error: "Internal Server Error"});
