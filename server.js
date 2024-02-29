@@ -103,7 +103,7 @@ app.use("/", userRouter);
 
 app.use("/admin", adminRouter);
 
-app.listen(3002,()=> console.log("server is running"))
+app.listen(3000,()=> console.log("server is running"))
 
 app.get('*',function(req,res){
   res.status(404).render("user/error-handling");
