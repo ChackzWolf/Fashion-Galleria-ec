@@ -164,9 +164,9 @@
     <header class="header-area header-sticky">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-xl-3 col-lg-2" style="padding:0%">
+                <div class="col-xl-3 col-lg-2">
                     <div style="max-height: 100px; max-width:400px">
-                        <a href="/"><img src="" alt=""></a>
+                        <a href="/"><img src="img/logo.svg" alt=""></a>
                     </div>
                 </div>
                 {{!-- <div class="col-xl-3 col-lg-2" style="padding: 0% !important">
@@ -253,117 +253,15 @@
 
             <div class="checkout__form">
                 <div class="row">
-                    <div class="col-lg-5">
-                        <h5>Billing detail</h5>
-                        <div class="row">
-
-                            <div class="grid">
-                                {{#each newAddress.address}}
-                                <div class="card">
-                                    <label>
-                                        <input name="address" onclick="enablePlaceOrder()" class="radio" type="radio"
-                                            id="addressId_{{this._id}}">
-                                        <span class="plan-details">
-                                            <span class="plan-type">Address {{increment @key}}</span>
-                                            <hr>
-                                            <input type="text" value="{{this._id}}" id="addressIdValue_{{this._id}}"
-                                                hidden>
-                                            <span>{{name}}</span>
-                                            <span>{{mobile}}</span>
-                                            <span>{{address}}</span>
-                                            <span>{{city}}</span>
-                                            <span>{{state}}</span>
-                                            <span>{{pincode}}</span>
-                                        </span>
-                                        <button type="button" class="btn btn-danger btn-sm ml-2 mt-2" data-mdb-toggle="modal"
-                                            data-mdb-target="#exampleModal{{@key}}">Remove</button>
-                                        
-                                    </label>
-                                </div>
-
-
-                                <div class="modal fade" id="exampleModal{{@key}}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                           
-                                                <h5 class="modal-title m-2" id="exampleModalLabel">Warning</h5>
-                                              
-                                            <div class="modal-body">Are you sure?</div>
-                                            <div class="modal-footer">
-
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-mdb-dismiss="modal">Close</button>
-
-                                                <a href="/remove-new-address-checkout?id={{this._id}}"><button
-                                                        type="button" class="btn btn-danger">Remove Address</button></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{/each}}
-                            </div>
-                            <div class="text-center mt-3">
-                                <a href="" class="btn btn-default btn-rounded mb-4 btn-primary" data-toggle="modal"
-                                    data-target="#modalLoginForm">Enter custom address</a>
-                            </div>
-
-                        </div>
 
 
 
+                  <div class="col-lg-7">
 
-                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <div class="col-lg-8">
-                        <div class="discount__content m-3">
-                            <h6>Discount codes</h6>
-
-                            <form action="#">
-                                <input type="text" id="couponCode" placeholder="Enter your coupon code">
-                                <button type="submit" class="site-btn" onclick="applyCoupon()">Apply</button>
-
-                                <div class="text-center mt-3">
-                                    <a href="" class="btn btn-default btn-rounded mb-4 btn-primary" data-toggle="modal"
-                                        data-target="#modalCoupon">Available coupons</a>
-                                </div>
-                            </form>
-
-                        </div>
-
-                        <p class="ml-3 mt-1 text-danger" id="invalidCoupon" style="display: none;">Coupon not validated
-                        </p>
-                        <p class="ml-3 mt-1 text-success" id="validCoupon" style="display: none;">Coupon Added</p>
-
-                        <button class="btn btn-danger ml-3" type="button" onclick="clearCoupon()" id="removeBtn"
-                            style="display: none;">Remove</button>
 
                         <div>
                             <div class="checkout__order mt-3">
                                 <h5>Your order</h5>
-
 
 
 
@@ -377,7 +275,6 @@
                                         <th>Size</th>
                                         <th>Price</th>
                                         <th>Quantity</th>
-
                                     </tr>
                                 </thead>
 
@@ -393,20 +290,20 @@
                                             </div>
                                         </td>
                                          {{#if (eq size "sizeSmall")}}
-                                        <td>Small</td>
+                                        <td>S</td>
                                         {{/if}}
                                         {{#if (eq size "sizeMedium")}}
-                                        <td>Medium</td>
+                                        <td>M</td>
                                         {{/if}}
                                          {{#if (eq size "sizeLarge")}}
-                                        <td>Large</td>
+                                        <td>L</td>
                                         {{/if}}
                                         {{#if (gt product.offerPrice 0)}}
                                         <td class="cart__price">₹ {{product.offerPrice}}</td>
                                         {{else}}
                                         <td class="cart__price">₹ {{product.price}}</td>
                                         {{/if}}
-                                        <td class="pro-qty-container">
+                                        <td class="cart__price">
                                             {{count}}
                                         </td>
 
@@ -420,22 +317,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -494,9 +375,146 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+                    <div class="col-lg-4">
+
+
+
+
+
+
+
+
+
+                        <div class="discount__content m-3">
+                            <h6>Discount codes</h6>
+
+                            <form action="#">
+                                <input type="text" id="couponCode" placeholder="Enter your coupon code">
+                                <button type="submit" class="site-btn" onclick="applyCoupon()">Apply</button>
+
+                                <div class="text-center mt-3">
+                                    <a href="" class="btn btn-default btn-rounded mb-4 btn-primary" data-toggle="modal"
+                                        data-target="#modalCoupon">Available coupons</a>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <p class="ml-3 mt-1 text-danger" id="invalidCoupon" style="display: none;">Coupon not validated
+                        </p>
+                        <p class="ml-3 mt-1 text-success" id="validCoupon" style="display: none;">Coupon Added</p>
+
+                        <button class="btn btn-danger ml-3" type="button" onclick="clearCoupon()" id="removeBtn"
+                            style="display: none;">Remove</button>
+
+
+
+
+
+
+
+
+
+
+
+
+                        {{!-- <h5>Billing detail</h5> --}}
+                        <div class="row">
+
+                            <div class="grid">
+                                {{#each newAddress.address}}
+                                <div class="card">
+                                    <label>
+                                        <input name="address" onclick="enablePlaceOrder()" class="radio" type="radio"
+                                            id="addressId_{{this._id}}" {{#if this.default}}checked{{/if}}>
+                                        <span class="plan-details">
+                                            <span class="plan-type">Address {{increment @key}}</span>
+                                            <hr>
+                                            <input type="text" value="{{this._id}}" id="addressIdValue_{{this._id}}"
+                                                hidden>
+                                            <span>{{name}}</span>
+                                            <span>{{mobile}}</span>
+                                            <span>{{address}}</span>
+                                            <span>{{city}}</span>
+                                            <span>{{state}}</span>
+                                            <span>{{pincode}}</span>
+                                        </span>
+                                        <button type="button" class="btn btn-danger btn-sm ml-2 mt-2" data-mdb-toggle="modal"
+                                            data-mdb-target="#exampleModal{{@key}}">Remove</button>
+                                        
+                                    </label>
+                                </div>
+
+
+                                <div class="modal fade" id="exampleModal{{@key}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                           
+                                                <h5 class="modal-title m-2" id="exampleModalLabel">Warning</h5>
+                                              
+                                            <div class="modal-body">Are you sure?</div>
+                                            <div class="modal-footer">
+
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-mdb-dismiss="modal">Close</button>
+
+                                                <a href="/remove-new-address-checkout?id={{this._id}}"><button
+                                                        type="button" class="btn btn-danger">Remove Address</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="" class="btn btn-default btn-rounded mb-4 btn-primary" data-toggle="modal"
+                                    data-target="#modalLoginForm">Enter custom address</a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+
+
+
+
     </section>
     <!-- Checkout Section End -->
 
@@ -513,24 +531,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
 
-                            <div class="grid">
-                                {{#each coupons}}
-                                <div class="card">
-                                    <label>
-                                      <input name="coupon"  class="radio" type="radio" id="couponId_{{this._id}}" data-coupon-code="{{this.couponCode}}">
-                                        <span class="plan-details">
-                                            <span class="plan-type">Address {{increment @key}}</span>
-                                            <hr>
-                                        
-                                            <span>{{couponCode}}</span>
-                                            <span>{{description}}</span>
-             
-                                        </span>
-
-                                    </label>
-                                </div>
-                                {{/each}}
+                        <div class="grid">
+                            {{#each coupons}}
+                            <div class="card">
+                                <label>
+                                  <input name="coupon"  class="radio" type="radio" id="couponId_{{this._id}}" data-coupon-code="{{this.couponCode}}">
+                                    <span class="plan-details">
+                                        <span class="plan-type">{{increment @key}}</span>
+                                        <hr>
+                                        <span>{{couponCode}}</span>
+                                        <span>{{description}}</span>
+            
+                                    </span>
+                                </label>
                             </div>
+                            {{/each}}
+                        </div>
 
             </div>
         </div>
@@ -716,25 +732,30 @@ $('#closeButton').click(function() {
 
             console.log('finalAmount',finalAmount)
 
-            paymentMethodCheck(paymentMethod,finalAmount);
             if(paymentMethod == "Wallet"){
+                var walletElement = document.getElementById('walletAmount');
+
                 var walletAmount= walletElement.innerText;
                 var totalAmount= finalAmount;
 
                 var walletAmount = parseInt(walletAmount);
                 var totalAmount = parseInt(totalAmount);
-
+                console.log(walletAmount,'kkkkkkkkkkkkkkk')
+                console.log(totalAmount,'jjjjjjjjjjjjjjjj')
                 if(totalAmount <= walletAmount){
+                    console.log('ppppppppp')
                     paymentMethodCheck(paymentMethod, finalAmount)
                 }else{
-                    document.getElementById('insufficientWallet').textContent = "Insufficient wallet amount";
+                    console.log('zzzzzzzzzvazhaaaa')
+                    document.getElementById('InsufficientWallet').textContent = "Insufficient wallet amount";
                 }
             }else{
+                console.log('ddddddddddddddddddd')
                 paymentMethaodCheck(paymentMethod,finalAmount)
             }
             // Find the selected address ID
             // Find the selected address ID
-        }
+        } 
 
         function paymentMethodCheck(paymentMethod,finalAmount) {
             let selectedAddressId;

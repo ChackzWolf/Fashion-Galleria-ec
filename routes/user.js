@@ -50,8 +50,8 @@ router.get("/return-user-order",userStatusCheck,userControllers.returnUserOrder)
 router.get("/otp-pass",otpSend,userControllers.otpViewPass);
 
 //reports
-router.get("/report",userStatusCheck,userControllers.loadReport)
-router.get("/report-generate",userStatusCheck,userControllers.generateReport)
+router.get("/report",userStatusCheck,userControllers.loadReport) //should work on it
+router.get("/report-generate",userStatusCheck,userControllers.generateReport) // should work on it
 
 // others 
 router.get("/blog",userLoginVarify,userStatusCheck,userControllers.blogView);

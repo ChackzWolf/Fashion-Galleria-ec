@@ -39,17 +39,20 @@ const loginView = (req,res) => {
 
 const indexView = async (req,res) => {
     try{
+        const userId = req.session.user._id;
         const category = await CategoryModel.find()
         const mensCategory = await CategoryModel.find({_id:'65996c9ed92f9b905b20f697'});
         const womensCategory = await CategoryModel.find({_id:'65996cabd92f9b905b20f69d'})
-        console.log('mensCategory',mensCategory);
-    
+        const cartCount = await userFunc.getCartCount(userId);
+        console.log(cartCount, 'cart count')
+       
+
         const products = await ProductModel.find({listStatus: true, deleteStatus: false}).limit(8)
         const mensProduct = await ProductModel.find({listStatus: true, deleteStatus: false,category:mensCategory[0]._id}).limit(8).populate('category')
         const womensProduct = await ProductModel.find({listStatus:true,deleteStatus:false,category:womensCategory[0]._id}).limit(8).populate('category')
     
         const banner = await BannerModel.find({listStatus:true});
-        res.render("user/index",{products,mensProduct,womensProduct,category,banner,mensCategory,womensCategory}); 
+        res.render("user/index",{products,mensProduct,womensProduct,category,banner,mensCategory,womensCategory,cartCount}); 
     }catch(error){
         res.status(500).json({ status: false, error: "Something went wrong on the server." });
 
@@ -74,8 +77,8 @@ const shopView = async (req,res) => {
     
         let strMin = req.query.minamount;
         let strMax = req.query.maxamount;
-        let minAmount;
-        let maxAmount;
+        let minAmount=1000;
+        let maxAmount=2000;
         if(typeof strMin === 'string' && typeof strMax === 'string'){
             // Split the string into an array of characters
             const charArrayMin = strMin.split('');
@@ -129,7 +132,7 @@ const shopView = async (req,res) => {
                 products = await ProductModel.find({category:req.query.category,listStatus: true, deleteStatus: false})
             }
             const categoryName = await CategoryModel.find({deleteStatus:false,listStatus:true});
-            return res.render("user/shop",{products,categoryName});
+            return res.render("user/shop",{products,categoryName,maxAmount,minAmount});
         }
     }catch(error){
         res.status(500).json({ status: false, error: "Something went wrong on the server." }); 
@@ -139,17 +142,23 @@ const shopView = async (req,res) => {
 
 const productDetailsView = async (req,res) => {
     try{
+        const userId = req.session.user._id;
         const products = await ProductModel.aggregate([{$match:{listStatus:true,deleteStatus:false}}]).limit(4);
         const singleProduct = await ProductModel.findOne({_id:req.query.id});
-        return res.render("user/product-details",{singleProduct,products});
+        const cartCount = await userFunc.getCartCount(userId)
+        
+        return res.render("user/product-details",{singleProduct,products,cartCount});
     }catch(error){
         res.status(500).json({ status: false, error: "Something went wrong on the server." }); 
     }
 };
 
-const blogView = (req,res)=> {
+const blogView = async(req,res)=> {
     try{
-        return res.render("user/blog");
+        const userId = req.session.user._id;
+        const cartCount = await userFunc.getCartCount(userId)
+
+        return res.render("user/blog",{cartCount});
     }catch(error){
         res.status(500).json({ status: false, error: "Something went wrong on the server." });
     }
@@ -164,7 +173,6 @@ const loadReport = async (req, res) => {
     } catch (err) {
         res.status(500).render("user/error-handling");
     }
-
 }
 
 const generateReport = async (req, res) => {
@@ -336,22 +344,20 @@ const signupUser  = async (req,res) =>{
                 const formattedDate = formatDate(currentDate);
             
                 let wallet = 50;
-                let walletHistory=[{transaction:'credited',amount:100,orderId:'Joining bonus',date:formattedDate}];
-            
+                let walletHistory=[{transaction:'credited',amount:50,orderId:'Joining bonus',date:formattedDate}];
                 if(referenceId){
                     var referralOffer = await userFunc.referenceIdApplyOffer(referenceId);
                     if(referralOffer){
                         wallet = wallet+100
                         const dataHistory = {
                                             transaction:'credited',
-                                            amount:50,
+                                            amount:100,
                                             orderId:'Referral joining bonus',
                                             date:formattedDate
                                         }
                         walletHistory.push(dataHistory);
                     }
-                }
-            
+                } 
                 sendMail(email)
                 session.email = email
                 
@@ -385,11 +391,8 @@ const signupUser  = async (req,res) =>{
             }
         }else{
             const errorMessage = "Please enter a valid email."
-
             res.render("user/signup",{errorMessage,isPasswordValid,isNumberValid,isNameValid})
         }
-
-        
     }catch(error){
         res.status(500).json({ status: false, error: 'Something went wrong on the server.' });
     }
@@ -456,26 +459,49 @@ const cartView = async(req,res) =>{
    try{
         const stockLimit = req.query.stockLimit;
         const userId = req.session.user._id;
-        const cartItems = await userFunc.getProducts(userId);
-        let total = await userFunc.getTotalAmount(userId);       
-        total = total[0]?total[0].total:0;
-        res.render("user/cart",{cartItems,total,stockLimit}); //pass tthe cart Object to the render function
-   }catch(err){
+        const cartExists = await CartModel.findOne({userId:userId});
+        let cartItems;
+
+        if(cartExists){
+
+            cartItems = await userFunc.getProducts(userId);
+            console.log(cartItems,'cartItems')
+            let total = await userFunc.getTotalAmount(userId);       
+            total = total[0]?total[0].total:0;
+            console.log('cartItems',cartItems)
+            const cartCount = await userFunc.getCartCount(userId)
+            res.render("user/cart",{cartItems,total,stockLimit,cartCount});
+        }else{
+            console.log('reached else')
+            const data = {
+                userId :userId,
+                cart:[]
+            };
+            cartItems = await CartModel.create(data);
+            console.log('cartItems',cartItems)
+            const cartCount = await userFunc.getCartCount(userId)
+            res.render("user/cart",{cartItems,stockLimit,cartCount});
+        }
+        console.log(cartItems,'cartitems')
+ //pass tthe cart Object to the render function
+   
+    }catch(err){
+        console.error(err)
         res.status(500).render("user/error-handling");
    }
 }
 
 const  addToCart = async(req,res)=>{
     try{
+        const userId = req.session.user._id;
         console.log("add to cart start.")
         const productId = req.query.id;
         console.log(productId);
-        const userId = req.session.user._id;
+        const products = await ProductModel.aggregate([{$match:{listStatus:true,deleteStatus:false}}]).limit(4);
+        const singleProduct = await ProductModel.findOne({_id:req.query.id});
+        const cartCount = await userFunc.getCartCount(userId)
         let size = req.query.size;
-        if(size == undefined){
-            console.log("size was undefined")
-            size = 'sizeMedium'
-        }
+
         const product = await ProductModel.findOne({_id:productId});
         console.log(product)
         if(product.offerPrice > 0){
@@ -512,14 +538,18 @@ const  addToCart = async(req,res)=>{
                         {userId: userId,'cart.productId': productId, 'cart.size':size},
                         {$inc:{'cart.$.count':1},}
                     );
-                    res.redirect("/cart");  
+                    const addedToCart = true
+                    return res.render("user/product-details",{singleProduct,products,cartCount,addedToCart}); 
                 }else{
                     let stockLimit = true;
-                    res.redirect(`/cart?stockLimit=${stockLimit}`);
+                    return res.render("user/product-details",{singleProduct,products,cartCount,stockLimit});
                 }
             }else{
                 await CartModel.updateOne({userId:userId},{$push:{cart:{productId,count:1,size}}})
-                res.redirect("/cart");
+                const addedToCart = true
+                return res.render("user/product-details",{singleProduct,products,cartCount,addedToCart});
+
+    
             }
         }else{
             console.log("reached cart else.")
@@ -531,7 +561,9 @@ const  addToCart = async(req,res)=>{
             const newCart = await CartModel.create(cartData);
             if(newCart){ 
                 console.log("if new cart")
-                res.redirect('/'); //moved the redirect here
+                const addedToCart = true
+                return res.render("user/product-details",{singleProduct,products,cartCount,addedToCart});
+
             }else{
                 console.log("reached newcart else error.")
                 res.status(404).render("user/error-handling");
@@ -563,6 +595,8 @@ const removeAddress = async (req,res)=>{
         const addressId = req.query.id;
         const userId = req.session.user._id;
         console.log('kkkkkkkkkkkkkkk')
+        const cartCount = await userFunc.getCartCount(userId);
+
         const removeAddress = await AddressModel.updateOne({userId:userId},{$pull:{address:{_id:addressId}}});
         console.log(removeAddress,'kkkkkkkkkkkkkkk')
         if(removeAddress){
@@ -570,12 +604,12 @@ const removeAddress = async (req,res)=>{
             const mesgAddressRemove = true
             const userDetails = await UserModel.findOne({_id:userId});
             const newAddress = await AddressModel.findOne({userId:userId});
-            res.render('user/user-profile',{mesgAddressRemove,userDetails,newAddress});
+            res.render('user/user-profile',{mesgAddressRemove,userDetails,newAddress,cartCount});
         }else{
             const errOccured = true
             const userDetails = await UserModel.findOne({_id:userId});
             const newAddress = await AddressModel.find({userId:userId})
-            res.render("user/user-profile",{errOccured,userDetails,newAddress});
+            res.render("user/user-profile",{errOccured,userDetails,newAddress,cartCount});
         }
     } catch (error) {
         console.error("Error in changeProductQuantity:", error);
@@ -614,18 +648,21 @@ const defaultAddress = async (req,res)=>{
     try{
         const userId = req.session.user._id;
         const addressId = req.query.id;
-        const currentDefaultAddress = await AddressModel.updateOne({"address.default":true},{$set:{"address.$.default":false}});
         const defaultAddress = await AddressModel.updateOne({'address._id':addressId},{$set:{"address.$.default":true}});
+        const cartCount = await userFunc.getCartCount(userId);
+        // setting current address to  not default;
+        await AddressModel.updateOne({"address.default":true},{$set:{"address.$.default":false}});
+
         if(defaultAddress){
             const userDetails = await UserModel.findById({_id:userId})
             const newAddress = await AddressModel.findOne({userId:userId})
-            res.render('user/user-profile',{userDetails,newAddress})
+            res.render('user/user-profile',{userDetails,newAddress,cartCount})
         }
         else{
             const errOccured = true
             const userDetails = await UserModel.findOne({_id:userId})
             const newAddress = await AddressModel.find({userId:userId})
-            res.render("user/user-profile",{userDetails,newAddress,errOccured});
+            res.render("user/user-profile",{userDetails,newAddress,errOccured,cartCount});
         }
     } catch (error) {
         console.error("Error in changeProductQuantity:", error);
@@ -659,19 +696,35 @@ const checkout = async(req,res)=>{
         const currentDate = new Date(); 
         const formattedDate = formatDate(currentDate);
         const finalAmount = req.body.finalAmount;
+
         let userAddress = await  AddressModel.findOne({userId: userId});
+
         console.log('userAddress',userAddress) 
         const address = userAddress.address.find(address => address._id.equals(selectedAddressId));
+
         const cartItems = await userFunc.getProducts(userId);
 
-        const products = cartItems.map(({ product, count, size }) => ({
-            productId: product._id,
-            name: product.name,
-            price: product.price,
-            count: count,
-            size: size,     
-            status: 'pending'
-        }));
+        // const products = cartItems.map(({ product, count, size }) => ({
+        //     productId: product._id,
+        //     name: product.name,
+        //     price: product.price,
+        //     count: count,
+        //     size: size,     
+        //     status: 'pending'
+        // }));
+
+        const products = cartItems.flatMap(({ product, count, size }) => {
+            // Create an array of objects, each representing a single instance of the product
+            const productInstances = Array.from({ length: count }, () => ({
+                productId: product._id,
+                name: product.name,
+                price: product.price,
+                size: size,
+                quantity: 1, // Each instance has a quantity of 1
+                status: 'pending'
+            }));
+            return productInstances;
+        });
 
         console.log("==========",products)
         const data = {
@@ -797,8 +850,9 @@ const ordersView =  async(req,res) =>{
     try{
         const userId = req.session.user._id
         const pendingOrders = await OrderModel.find({userId:userId}).sort({$natural: -1});
-        console.log(pendingOrders,'pendingOrderssssssssssssssss');
-        res.render('user/orders',{pendingOrders});
+        const cartCount = await userFunc.getCartCount(userId)
+        res.render('user/orders',{pendingOrders,cartCount});
+        
     } catch (error) {
         console.error("Error in changeProductQuantity:", error);
         res.status(500).json({error: "Internal Server Error"});
@@ -813,7 +867,10 @@ const cancelUserOrder = async(req,res)=>{
         console.log(orderId,'orderId');
         console.log(productId,'productId');
         const orderDetails = await OrderModel.findById({_id: orderId});
+        console.log(orderDetails,'orderDetails')
         const userId = req.session.user._id
+        const cartCount = await userFunc.getCartCount(userId)
+
         const currentDate = new Date();
         const formattedDate = formatDate(currentDate);
         if(orderDetails.paymentMethod === 'Online'){
@@ -830,7 +887,8 @@ const cancelUserOrder = async(req,res)=>{
             await UserModel.updateOne({_id:userId},{$push:{walletHistory:transaction}})
         }
 
-        if(orderDetails.status == 'pending'){
+        console.log(updatedOrder,'updateorder')
+    
             for(let product of orderDetails.products){
                 console.log(product.productId,'productIDdddd')
                 const productDetails = await ProductModel.findById(product.productId);
@@ -849,18 +907,14 @@ const cancelUserOrder = async(req,res)=>{
                 { $set: { 'products.$.status': 'cancelled' } } // Update
               );
             if(success){
-                res.redirect("/orders");
-            }else{
-                res.redirect('/orders');
-            }
-        } else {
-            res.redirect("/orders");
-        }       
+                res.redirect("/orders",{cartCount});
+            }     
     } catch (error) {
         console.error("Error in canceling order:", error);
         res.status(500).json({error: "Internal Server Error"});
     }
 }
+
 
 const orderDetailView = async(req,res)=>{
     try{
@@ -882,6 +936,7 @@ const orderDetailView = async(req,res)=>{
         }
         res.render("user/order-detail-view",{orderDetails,orderReturn});
     }catch(error){
+        console.error(error)
         res.status(500).json({error: "Internal Server Error"});
     }
 }
@@ -891,6 +946,8 @@ const transactionOrderDetailView = async(req,res)=>{
     try{
         const orderId = req.query.id;
         const orderDetails = await OrderModel.findOne({orderId:orderId});
+        const cartCount = await userFunc.getCartCount(userId);
+
         if(!orderDetails){
           return res.ststus(404).json({message:'Order not found.'});
         }
@@ -909,9 +966,10 @@ const transactionOrderDetailView = async(req,res)=>{
         if(daysDifference<=7){
           orderReturn = true;
         }
-        res.render("user/order-detail-view",{orderDetails,orderReturn});
+        res.render("user/order-detail-view",{orderDetails,orderReturn,cartCount});
     }catch(error){
-
+        console.error(error);
+        res.status(500).json({error: "Internal Server Error"});
     }
 
 }
@@ -925,11 +983,9 @@ const userProfile = async(req,res)=>{
         const newAddress = await AddressModel.findOne({userId:userId});
         if(newAddress){
             console.log('userProfile',newAddress.address)
-            res.render('user/user-profile',{userDetails,newAddress});
+            const cartCount = await userFunc.getCartCount(userId);
+            res.render('user/user-profile',{userDetails,newAddress,cartCount});
         }
-        console.log(newAddress);
-
-        res.render('user/user-profile',{userDetails,newAddress});
      } catch (error) {
          console.error("Error in changeProductQuantity:", error);
          res.status(500).json({error: "Internal Server Error"});
@@ -975,18 +1031,20 @@ const addNewAddressCheckout = async(req,res)=>{
             const newAddress = await AddressModel.findOne({userId:userId});
             const userDetails = await UserModel.findById({_id:userId});
             const coupons = await CouponModel.find();    
+            const cartItems = await CartModel.find();
             let total = await userFunc.getTotalAmount(userId)
             total = total[0] ? total[0].total : 0;
             mesgAddressNew = true;
-            res.render("user/checkout",{mesgAddressNew, userDetails, newAddress,total,coupons});
+            res.render("user/checkout",{mesgAddressNew, userDetails, newAddress,total,coupons,cartItems});
         }else{
             const newAddress = await AddressModel.findOne({userId:userId})
             const userDetails = await UserModel.findById({_id:userId});
-            const coupons = await CouponModel.find();        
+            const coupons = await CouponModel.find();       
+            const cartItems = await CartModel.find();
             let total = await userFunc.getTotalAmount(userId)
             total = total[0] ? total[0].total : 0;
             errOccured =true
-            res.render("user/checkout",{errOccured, userDetails,newAddress,total,coupons})
+            res.render("user/checkout",{errOccured, userDetails,newAddress,total,coupons,cartItems})
         }
     } catch (error) {
         console.error("Error in changeProductQuantity:", error);
@@ -1269,7 +1327,9 @@ const walletHistory = async(req,res)=>{
     try{
         const userId = req.session.user._id
         const user = await UserModel.findOne({_id:userId});
-        res.render("user/wallet-history",{user});
+        const cartCount = await userFunc.getCartCount(userId);
+
+        res.render("user/wallet-history",{user,cartCount});
     }catch{
         res.status(500).json({error: "Internal server Error"});
     }

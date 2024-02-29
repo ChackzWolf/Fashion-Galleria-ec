@@ -155,7 +155,7 @@
             </li>
             <li>
                 <a href="/cart"><i class="fas fa-shopping-bag"></i>
-                <div class="tip">2</div></a>
+                 {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
             </li>
         </ul>
 
@@ -224,7 +224,8 @@
                             <li><a href="#"><i class="fas fa-heart"></i>
                             </a></li>
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
-                                <div class="tip">2</div>
+                                              {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
+
                             </a></li>
                             <li>
                                    <!-- User icon dropdown container -->

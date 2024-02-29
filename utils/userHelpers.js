@@ -494,6 +494,28 @@ const referenceIdApplyOffer = async(referenceId)=>{
     }
 }
 
+
+const getCartCount= async(userId)=>{
+    try {
+      // Use the $size operator to get the size of the cart array
+      // and $match to filter by the userId
+      const result = await CartModel.aggregate([
+        { $match: { userId: userId } },
+        { $project: { cartCount: { $size: "$cart" } } }
+      ]);
+  
+      // The result will be an array of documents, each with a cartCount field
+      // Since we're filtering by userId, we expect at most one document in the result
+      // We'll take the first element of the result array and its cartCount field
+      const cartCount = result.length >  0 ? result[0].cartCount :  0;
+  
+      return cartCount;
+    } catch (error) {
+      console.error('Error getting cart count:', error);
+      return  0; // Return  0 if there's an error
+    }
+}
+
 module.exports = {
     getTotalAmount,
     getProducts,
@@ -506,5 +528,6 @@ module.exports = {
     validatePassword,
     validateEmail,
     validateName,
-    validatePhoneNumber
+    validatePhoneNumber,
+    getCartCount
 }

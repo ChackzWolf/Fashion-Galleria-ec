@@ -22,7 +22,7 @@ const fileHandler = require("../utils/files")
 
  const dashboardView = async (req, res) => {
     try {
-        let totalDeliveredAmount = 0;
+        let TotalDeliveredAmount = 0;
         // const recentOrders = await OrderModel.find({ status: 'delivered' })
         const recentOrders = await OrderModel.find({ status: 'delivered' }).populate('userId');
         const countOfDeliveredOrders = await OrderModel.countDocuments({ status: 'delivered' });
@@ -30,9 +30,9 @@ const fileHandler = require("../utils/files")
         const user = await UserModel.find({_id:recentOrders.userId});
         
         recentOrders.forEach(order => {
-            totalDeliveredAmount += order.amount;
+            TotalDeliveredAmount += order.amount;
         });
-
+        let totalDeliveredAmount = Math.floor(TotalDeliveredAmount);
         res.render("admin/index", { recentOrders, countOfDeliveredOrders, totalDeliveredAmount, countOfUsers,user })
     } catch (err) {
         res.status(500).render("user/error-handling");
@@ -616,7 +616,7 @@ const orderCancel = async(req,res)=>{//// I have made some terribl changes here
 
 
 const returnAccept = async (req, res) => {
-    try {
+    // try {
         const orderId = req.query.orderId
         const productId = req.query.productId
         console.log(productId,'productId');
@@ -647,7 +647,7 @@ const returnAccept = async (req, res) => {
         }).lean(); // Convert the result to plain JavaScript objects
         
         // Access the price of the first matching product
-        const price = product.products[0].price;
+        const price = await adminFunc.getOrderPrice(orderId,productId)
     
         if(status === 'returnDefective'){
 
@@ -687,9 +687,10 @@ const returnAccept = async (req, res) => {
         } else {
             res.render("admin/return-pending",{returnPending});
         }
-    } catch (err) {
-        res.status(500).render("user/error-handling");
-    }
+    // } catch (err) {
+    //     console.error(err);
+    //     res.status(500).render("user/error-handling");
+    // }
 }
 
 

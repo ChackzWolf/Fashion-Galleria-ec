@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 
 
-
+    <link rel="stylesheet" href="sweetalert2.min.css">
 
 
 
@@ -168,7 +168,7 @@
             </li>
             <li>
                 <a href="/cart"><i class="fas fa-shopping-bag"></i>
-                <div class="tip">2</div></a>
+                                {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
             </li>
         </ul>
 
@@ -205,15 +205,15 @@
                             
                             <li><a href="/shop">Shop</a></li>
                             <li><a href="#">Pages</a>
-                                <ul class="dropdown">
+                                {{!-- <ul class="dropdown">
                                     <li><a href="/orders">View orders</a></li>
                                     <li><a href="./shop-cart.html">Shop Cart</a></li>
                                     <li><a href="./checkout.html">Checkout</a></li>
                                 
-                                </ul>
+                                </ul> --}}
                             </li>
                             <li><a href="/blog">Blog</a></li>
-                            <li><a href="/contact">Contact</a></li>
+                            {{!-- <li><a href="/contact">Contact</a></li> --}}
                         </ul>
                     </nav>
                 </div>
@@ -239,7 +239,7 @@
                             <li><a href="#"><i class="fas fa-heart"></i>
                             </a></li>
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
-                                <div class="tip">2</div>
+                                {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
                             </a></li>
                             <li>
                                    <!-- User icon dropdown container -->
@@ -250,6 +250,8 @@
                                     <div class="user-dropdown-content">
                                         <!-- Individual items with icons -->
                                         <a href="/user-profile"><i class="fas fa-user">  Profile</i></a>
+                                        <a href="/wallet-history"><i class="fas">  Wallet history</i></a>
+                                        <a href="/orders"><i class="fas">  View orders</i></a>
                                         {{!-- <a href="#"><i class="fas fa-cog"></i></a> --}}
                                         <a href="/userLogout"><i class="fas fa-sign-out-alt">  Logout</i></a>
                                     </div>
@@ -315,14 +317,14 @@
                 <div class="col-lg-6">
                     <div class="product__details__text">
                         <h3>{{singleProduct.name}}</h3>
-                        <div class="rating">
+                        {{!-- <div class="rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <span>( 138 reviews )</span>
-                        </div>
+                        </div> --}}
 
                         {{#if (gt singleProduct.offerPrice 0)}}
                             <div class="product__details__price">₹ {{singleProduct.offerPrice}}<span>{{singleProduct.price}}</span></div>
@@ -338,10 +340,10 @@
                                 </div>
                             </div>
                             <button onclick="addToCart('{{singleProduct._id}}')"  class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</button>
-                            <ul>
+                            {{!-- <ul>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
-                            </ul>
+                            </ul> --}}
                         </div>
                         <div class="product__details__widget">
                             <ul>
@@ -405,9 +407,9 @@
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
                             </li>
-                            <li class="nav-item">
+                            {{!-- <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Reviews ( 2 )</a>
-                            </li>
+                            </li> --}}
                         </ul>
                         <div class="tab-content">
                             
@@ -416,7 +418,7 @@
                                 <p>{{singleProduct.description}}</p>
                             </div>
 
-                            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            {{!-- <div class="tab-pane" id="tabs-2" role="tabpanel">
                                 <h6>Reviews ( 2 )</h6>
                                 <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
                                     quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
@@ -428,7 +430,7 @@
                                     dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
                                     nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
                                 quis, sem.</p>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
@@ -447,22 +449,22 @@
                     <div class="product__item">
                         <div class="product__item__pic set-bg" data-setbg="">
                             <div class="label new">New</div>
-                            <img src="uploaded-images/{{imageUrl.[0]}}" alt="">
-                            <ul class="product__hover">
+                            <a href="/product-details?id={{this._id}}"><img src="uploaded-images/{{imageUrl.[0]}}" alt=""></a>
+                            {{!-- <ul class="product__hover">
                                 <li><a href="" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
+                            </ul> --}}
                         </div>
                         <div class="product__item__text">
                             <h6><a href="#">{{name}}</a></h6>
-                            <div class="rating">
+                            {{!-- <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
-                            </div>
+                            </div> --}}
                             <div class="product__price">{{price}}</div>
                         </div>
                     </div>
@@ -697,7 +699,7 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/jquery.nicescroll.min.js"></script>
     <script src="js/main.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>
     let options = {
@@ -718,10 +720,12 @@
 
 </script>
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+    
     {{!-- for search box --}}
-        <script>
+    <script>
         function toggleSearch() {
             const searchContainer = document.querySelector('.search-container');
             const isVisible = searchContainer.style.right === '0px';
@@ -737,26 +741,42 @@
 
     <script>
         function addToCart(id) {
-          const selectedSize = document.querySelector('input[name="size"]:checked');
+            const selectedSize = document.querySelector('input[name="size"]:checked');
 
-          if (!selectedSize) {
-            // Show the modal if no size is selected
-            $('#exampleModal').modal('show');
-            return;  // Stop the function if no size is selected
-          }
-
-          const selectedValue = selectedSize.value;
-
-          const returnUrl = `/addToCart?id=${id}&size=${selectedValue}`;
-
-          window.location.href = returnUrl;
+            if (!selectedSize) {
+              // Show the modal if no size is selected
+              $('#exampleModal').modal('show');
+              return;  // Stop the function if no size is selected
+            }
+            const selectedValue = selectedSize.value;
+            const returnUrl = `/addToCart?id=${id}&size=${selectedValue}`;
+            window.location.href = returnUrl;
         }
 
         // Close the modal when the "Close" button inside the modal is clicked
         document.getElementById('closeModalBtn').addEventListener('click', function() {
-          $('#exampleModal').modal('hide');
+            $('#exampleModal').modal('hide');
         });
+
     </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+//added to cart notification
+document.addEventListener('DOMContentLoaded', (event) => {
+    const addedToCart = {{addedToCart}};
+    if(addedToCart == true){
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Product added to cart",
+            showConfirmButton: false,   
+        });
+    }
+});
+</script>
 
 </body>
 </html>

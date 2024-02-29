@@ -58,8 +58,7 @@ const OrderSchema = mongoose.Schema({
             required:true
         },
         count:{
-            type:Number,
-            required:true, 
+            type:Number, 
         },
         productStatus:{
             type:String,

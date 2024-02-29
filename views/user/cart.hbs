@@ -226,11 +226,11 @@
                                     </div>
                                 </div>
                             </li>
-                            <li><a href="#"><i class="fas fa-heart"></i>
+                            {{!-- <li><a href="#"><i class="fas fa-heart"></i>
                             </a></li>
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
                                 <div class="tip">2</div>
-                            </a></li>
+                            </a></li> --}}
                             <li>
                                    <!-- User icon dropdown container -->
                                 <div class="user-dropdown">
@@ -240,6 +240,8 @@
                                     <div class="user-dropdown-content">
                                         <!-- Individual items with icons -->
                                         <a href="/user-profile"><i class="fas fa-user">  Profile</i></a>
+                                        <a href="/wallet-history"><i class="fas">  Wallet history</i></a>
+                                        <a href="/orders"><i class="fas">  View orders</i></a>
                                         {{!-- <a href="#"><i class="fas fa-cog"></i></a> --}}
                                         <a href="/userLogout"><i class="fas fa-sign-out-alt">  Logout</i></a>
                                     </div>
@@ -295,6 +297,7 @@
                                 </thead>
 
                                 <tbody>
+                                        {{#if (gt cartCount 0)}}
 
                                     {{#each cartItems}}
                                     <tr>
@@ -374,14 +377,14 @@
                                         </div>
                                     </dsiv>
                                     {{/each}}
-
+                                    {{/if}}
                                 </tbody>
 
                             </table>
                         </div>
                     </div>
                 </div>
-                {{#if cartItems}}
+                {{#if (gt cartCount 0)}}
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="cart__btn">
@@ -660,6 +663,15 @@
                     document.querySelector('form[action="/checkout"] button[type="submit"]').removeAttribute('disabled');
                 });
         }
+
+
+
+
+
+
+
+
+
     </script>
 
 

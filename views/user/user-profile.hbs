@@ -215,7 +215,7 @@
             </li>
             <li>
                 <a href="/cart"><i class="fas fa-shopping-bag"></i>
-                <div class="tip">2</div></a>
+                 {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
             </li>
             
             
@@ -263,7 +263,6 @@
                             <li class="scroll-to-section"><a href="/" class="active">Home</a></li>            
                             <li><a href="/shop">Shop</a></li>
                             <li><a href="/blog">Blog</a></li>
-                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -275,21 +274,10 @@
                         </div> --}}
 
                         <ul class="header__right__widget">
-                            <li>
-                                <div class="fas fa-search" onclick="toggleSearch()">
-                                    <!-- Unicode for magnifying glass icon -->
-                                </div>
-                                <div class="search-container">
-                                    <div class="search-box">
-                                        <!-- Your search input and other content here -->
-                                        <input type="text" placeholder="Search...">
-                                    </div>
-                                </div>
-                            </li>
-                            <li><a href="#"><i class="fas fa-heart"></i>
-                            </a></li>
+                            {{!-- <li><a href="#"><i class="fas fa-heart"></i>
+                            </a></li> --}}
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
-                                <div class="tip">2</div>
+                                 {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
                             </a></li>
                             <li>
                                    <!-- User icon dropdown container -->
@@ -299,7 +287,7 @@
                                     <!-- Dropdown content -->
                                     <div class="user-dropdown-content">
                                         <!-- Individual items with icons -->
-                                        <a href="/user-profile"><i class="fas fa-user">  Profile</i></a>
+                 
                                         {{!-- <a href="#"><i class="fas fa-cog"></i></a> --}}
                                         <a href="/userLogout"><i class="fas fa-sign-out-alt">  Logout</i></a>
                                     </div>
@@ -353,7 +341,7 @@
 
 
 
-   <li class="nav-item">
+    {{!-- <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -374,7 +362,7 @@
 
         </ul>
       </li>
-      <!-- End Forms Nav -->
+      <!-- End Forms Nav --> --}}
 
 
 
@@ -400,54 +388,6 @@
     </div><!-- End Page Title -->
 
     <section class="section profile">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -531,6 +471,11 @@
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">Referral Id</div>
                     <div class="col-lg-9 col-md-8">{{userDetails.referenceId}}</div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Wallet</div>
+                    <div class="col-lg-9 col-md-8">{{userDetails.wallet}}</div>
                   </div>
 
 
@@ -846,19 +791,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     <script>
 
         $(function() {
@@ -912,19 +844,8 @@
     
     <!-- Global Init -->
     <script src="assets/js/custom.js"></script>
-      {{!-- for search box --}}
-   <script>
-        function toggleSearch() {
-            const searchContainer = document.querySelector('.search-container');
-            const isVisible = searchContainer.style.right === '0px';
 
-            if (isVisible) {
-                searchContainer.style.right = '-300px';
-            } else {
-                searchContainer.style.right = '0';
-            }
-        }
-    </script>
+
 
 </body>
 
