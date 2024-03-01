@@ -142,10 +142,10 @@
         </div>
         <div class="offcanvas__close">+</div>
         <ul class="offcanvas__widget">
-            {{!-- <li><span class="icon_search search-switch"></span></li> --}}
+            {{!-- <li><span class="icon_search search-switch"></span></li>
             <li>
                 <a href="/wishlist"><i class="fas fa-heart"></i></a>
-            </li>
+            </li> --}}
             <li>
                 <a href="/cart"><i class="fas fa-shopping-bag"></i>
                 <div class="tip">2</div></a>
@@ -177,23 +177,22 @@
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
                         <ul>
-                            <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="#women">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/" class="active">Home</a></li>
+
                              
 
                             
                             <li><a href="/shop">Shop</a></li>
-                            <li><a href="#">Pages</a>
+                            {{!-- <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="/orders">View orders</a></li>
                                     <li><a href="./shop-cart.html">Shop Cart</a></li>
                                     <li><a href="./checkout.html">Checkout</a></li>
                                 
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li><a href="/blog">Blog</a></li>
-                            <li><a href="/contact">Contact</a></li>
+               
                         </ul>
                     </nav>
                 </div>
@@ -205,22 +204,12 @@
                         </div> --}}
 
                         <ul class="header__right__widget">
-                            <li>
-                                <div class="fas fa-search" onclick="toggleSearch()">
-                                    <!-- Unicode for magnifying glass icon -->
-                                </div>
-                                <div class="search-container">
-                                    <div class="search-box">
-                                        <!-- Your search input and other content here -->
-                                        <input type="text" placeholder="Search...">
-                                    </div>
-                                </div>
-                            </li>
-                            <li><a href="#"><i class="fas fa-heart"></i>
-                            </a></li>
+                            {{!-- <li><a href="#"><i class="fas fa-heart"></i>
+                            </a></li> --}}
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
                                 <div class="tip">2</div>
                             </a></li>
+                            
                             <li>
                                    <!-- User icon dropdown container -->
                                 <div class="user-dropdown">
@@ -750,16 +739,17 @@ $('#closeButton').click(function() {
                     document.getElementById('InsufficientWallet').textContent = "Insufficient wallet amount";
                 }
             }else{
-                console.log('ddddddddddddddddddd')
-                paymentMethaodCheck(paymentMethod,finalAmount)
+                console.log('ddddddddddddddddddd',paymentMethod,finalAmount)
+
+                paymentMethodCheck(paymentMethod,finalAmount)
             }
-            // Find the selected address ID
             // Find the selected address ID
         } 
 
         function paymentMethodCheck(paymentMethod,finalAmount) {
             let selectedAddressId;
-            console.log('hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+
+            console.log('started')
             // Find the checked radio input
             const checkedInput = document.querySelector('input[name="address"]:checked');
 

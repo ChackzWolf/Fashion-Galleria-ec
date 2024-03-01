@@ -92,15 +92,30 @@ const  addProduct = async (req,res) =>{
 
 
 const listUnlistProduct = async(req,res)=>{
-  console.log("step1")
-  const product = await ProductModel.findById({_id:req.params.id})                    
+
+  const pageNum =  req.query.page;
+  const perPage = 6 ;
+  let docCount
+  let pages
+  const documents = await ProductModel.countDocuments({deleteStatus:false})
+
+
+  const product = await ProductModel.findById({_id:req.params.id})                   
   if(product){
-    console.log("step2")
+  
     const update = await ProductModel.updateOne({_id:product.id}, {$set: {listStatus:!product.listStatus}})
     if(update){
-      console.log("step3")
-      const products = await ProductModel.find({deleteStatus:false});
-      res.render("admin/edit-product",{products});
+    
+      const products = await ProductModel.find({deleteStatus:false}).skip((pageNum - 1) * perPage).limit(perPage); 
+      docCount = documents
+      pages = Math.ceil(docCount / perPage)
+    
+      let countPages = []
+      for (let i = 0; i < pages; i++) {
+    
+          countPages[i] = i + 1
+      }
+      res.render("admin/edit-product",{products,countPages});
     }else{
       console('not updated.')
       res.render("admin/edit-product")
@@ -136,11 +151,7 @@ const editedProductDetails = async (req,res)=>{
   if(!existingProduct){
     return res.status(404).send("Product not found.");
   }
-console.log(existingProduct.imageUrl[0])
-console.log(existingProduct.imageUrl[1])
-console.log(existingProduct.imageUrl[2])
-  console.log(images[0])
-  console.log(images[1])
+
 
 
   let c = 0
@@ -187,6 +198,7 @@ const editProductDetailsView = async(req,res)=>{
  
 
 const deleteProduct = async(req,res)=>{
+
   const productID = req.params.id
   const product = await ProductModel.findById({_id:productID})
   console.log(productID,'dddiddddddddd');

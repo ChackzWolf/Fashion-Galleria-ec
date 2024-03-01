@@ -1023,14 +1023,14 @@ const addNewAddressCheckout = async(req,res)=>{
     try{
         const details = req.body;
         const userId = req.session.user._id
-        
         const updateAddress = await userFunc.newAddressManagement(details,userId);
         console.log('update address 1', updateAddress)
+        const cartItems = await userFunc.getProducts(userId);
         if(updateAddress){
             const newAddress = await AddressModel.findOne({userId:userId});
             const userDetails = await UserModel.findById({_id:userId});
             const coupons = await CouponModel.find();    
-            const cartItems = await CartModel.find();
+   
             let total = await userFunc.getTotalAmount(userId)
             total = total[0] ? total[0].total : 0;
             mesgAddressNew = true;
@@ -1039,7 +1039,7 @@ const addNewAddressCheckout = async(req,res)=>{
             const newAddress = await AddressModel.findOne({userId:userId})
             const userDetails = await UserModel.findById({_id:userId});
             const coupons = await CouponModel.find();       
-            const cartItems = await CartModel.find();
+            
             let total = await userFunc.getTotalAmount(userId)
             total = total[0] ? total[0].total : 0;
             errOccured =true

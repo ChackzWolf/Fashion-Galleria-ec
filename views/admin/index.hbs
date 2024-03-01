@@ -35,6 +35,7 @@
   <!-- Templat..e Main CSS File -->
   <link href="/assetsAdmin/css/style.css" rel="stylesheet">
   <link rel="stylesheet" href="/assetsAdmin/css/side-bar-toggle.css">
+   <link rel="stylesheet" href="/assetsAdmin/pagination.css">
   <!-- =======================================================
   * Template Name: NiceAdmin
   * Updated: Aug 30 2023 with Bootstrap v5.3.1
@@ -340,7 +341,7 @@
               <i class="bi bi-layout-text-window-reverse"></i><span>Show All Category</span></i>
             </a>
           </li>
-          <li>
+          {{!-- <li>
             <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/listedCategory">
               <i class="bi bi-layout-text-window-reverse"></i><span>Show Listed Category</span></i>
             </a>
@@ -349,7 +350,7 @@
             <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/unlistedCategory">
               <i class="bi bi-layout-text-window-reverse"></i><span>Show Unlisted Category</span></i>
             </a>
-          </li>
+          </li> --}}
 
 
         </ul>
@@ -775,6 +776,13 @@
 
                     </tbody>
                   </table>
+                <div class="col-lg-12 text-center">
+                    <div class="pagination__option">
+                        {{#each countPages}}
+                        <a href="/admin?page={{this}}">{{this}}</a>
+                        {{/each}}  
+                    </div>
+                </div>
 
                 </div>
 

@@ -22,18 +22,32 @@ const fileHandler = require("../utils/files")
 
  const dashboardView = async (req, res) => {
     try {
+        const pageNum =  req.query.page;
+        const perPage = 6 ;
+        let docCount
+        let pages
+        const documents = await OrderModel.countDocuments({ status: 'delivered' }).populate('userId')
+
         let TotalDeliveredAmount = 0;
         // const recentOrders = await OrderModel.find({ status: 'delivered' })
-        const recentOrders = await OrderModel.find({ status: 'delivered' }).populate('userId');
+        const recentOrders = await OrderModel.find({ status: 'delivered' }).populate('userId').skip((pageNum - 1) * perPage).limit(perPage);
         const countOfDeliveredOrders = await OrderModel.countDocuments({ status: 'delivered' });
         const countOfUsers = await UserModel.countDocuments();
         const user = await UserModel.find({_id:recentOrders.userId});
-        
+        let countPages = []
+        // pagination function
+        docCount = documents
+        pages = Math.ceil(docCount / perPage)
+        for (let i = 0; i < pages; i++) {
+
+            countPages[i] = i + 1
+        }
+        ///
         recentOrders.forEach(order => {
             TotalDeliveredAmount += order.amount;
         });
         let totalDeliveredAmount = Math.floor(TotalDeliveredAmount);
-        res.render("admin/index", { recentOrders, countOfDeliveredOrders, totalDeliveredAmount, countOfUsers,user })
+        res.render("admin/index", { recentOrders, countOfDeliveredOrders, totalDeliveredAmount, countOfUsers,user,countPages })
     } catch (err) {
         res.status(500).render("user/error-handling");
     }
@@ -243,6 +257,18 @@ const categoryListView = async(req,res)=>{
 
 const orderDelivered = async(req,res)=>{
     try{
+        const pageNum =  req.query.page;
+        const perPage = 6 ;
+        let docCount
+        let pages
+        const documents = await OrderModel.countDocuments({
+            products: {
+                $elemMatch: {
+                    status: { $in: ['pending', 'shipped'] }
+                }
+            }    
+        });
+
         const orderId = req.query.id;
         const productId = req.query.pro_id
         console.log(orderId);
@@ -267,9 +293,17 @@ const orderDelivered = async(req,res)=>{
                             status: { $in: ['pending', 'shipped'] }
                         }
                     }
-                });
-                  
-                res.render("admin/pending-orders",{pendingOrders});
+                }).skip((pageNum - 1) * perPage).limit(perPage);
+                docCount = documents
+                pages = Math.ceil(docCount / perPage)
+        
+                let countPages = []
+                for (let i = 0; i < pages; i++) {
+        
+                    countPages[i] = i + 1
+                }
+                
+                res.render("admin/pending-orders",{pendingOrders,countPages});
             }
         }else{
             console.log('order not found')
@@ -282,9 +316,20 @@ const orderDelivered = async(req,res)=>{
 
 const orderShipped = async(req,res)=>{
     try{
+        const pageNum =  req.query.page;
+        const perPage = 6 ;
+        let docCount
+        let pages
         const orderId = req.query.id;
         const productId = req.query.pro_id;
-    
+        const documents = await OrderModel.countDocuments({
+            products: {
+                $elemMatch: {
+                    status: { $in: ['pending', 'shipped'] }
+                }
+            }    
+        });
+
         console.log(orderId);
         const order = await OrderModel.findOne({_id:orderId})
         if(order){
@@ -299,8 +344,19 @@ const orderShipped = async(req,res)=>{
                             status: { $in: ['pending', 'shipped'] }
                         }
                     }
-                });
-                res.render("admin/pending-orders",{pendingOrders});
+                }).skip((pageNum - 1) * perPage).limit(perPage);
+
+                docCount = documents
+                pages = Math.ceil(docCount / perPage)
+        
+                let countPages = []
+                for (let i = 0; i < pages; i++) {
+        
+                    countPages[i] = i + 1
+                }
+
+
+                res.render("admin/pending-orders",{pendingOrders,countPages});
             }
         }
     }catch(error){
@@ -583,6 +639,7 @@ const returnNonDefective = async(req,res)=>{
 
 const orderCancel = async(req,res)=>{//// I have made some terribl changes here 
     try{
+        
         const orderId = req.query.orderId;
         const productId = req.query.productId;
         
@@ -617,11 +674,22 @@ const orderCancel = async(req,res)=>{//// I have made some terribl changes here
 
 const returnAccept = async (req, res) => {
     // try {
+        const pageNum =  req.query.page;
+        const perPage = 6 ;
+        let docCount
+        let pages
+
         const orderId = req.query.orderId
         const productId = req.query.productId
         console.log(productId,'productId');
         console.log(orderId,'orderId');
-    
+        const documents = await OrderModel.countDocuments({
+            products: {
+                $elemMatch: {
+                    status: { $in: ['returnNonDefective', 'returnDefective'] }
+                }
+            }
+        })
         const status = req.query.status
         const order = await OrderModel.findOne({_id:orderId});
         // const returnPending = await OrderModel.find({status:{$in:['returnNonDefective','returnDefective']}})
@@ -631,7 +699,18 @@ const returnAccept = async (req, res) => {
                     status: { $in: ['returnNonDefective', 'returnDefective'] }
                 }
             }
-        });
+        }).skip((pageNum - 1) * perPage).limit(perPage);
+
+
+        docCount = documents
+        pages = Math.ceil(docCount / perPage)
+
+        let countPages = []
+        for (let i = 0; i < pages; i++) {
+
+            countPages[i] = i + 1
+        }
+        
         const orderDetails = await OrderModel.findOne({_id:orderId});
         const currentDate = new Date();
         const formattedDate = formatDate(currentDate);

@@ -20,7 +20,7 @@
 						{{!-- <img src="img/logo.png" width="150px"> --}}
 					</div>
 					<div class="heading mb-3">
-						{successMessage}
+						{{successMessage}}
 						<h4>Admin Login</h4>
 					</div>
 					<form method="post" action="/admin/loginAdmin" >
@@ -33,15 +33,15 @@
 							<input type="password" placeholder="Password" required name='password'>
 						</div>
 						<div class="row mb-3">
-							<div class="col-6 d-flex">
+							{{!-- <div class="col-6 d-flex">
 								<div class="custom-control custom-checkbox">
 									<input type="checkbox" class="custom-control-input" id="cb1">
 									<label class="custom-control-label text-white" for="cb1">Remember me</label>
 								</div>
-							</div>
-							<div class="col-6 text-right">
+							</div> --}}
+							{{!-- <div class="col-6 text-right">
 								<a href="forget.html" class="forget-link">Forget password</a>
-							</div>
+							</div> --}}
 						</div>
 						<div class="text-left mb-3">
 							<button type="submit" class="btn">Login</button>
