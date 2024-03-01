@@ -35,7 +35,7 @@ const loginView = (req,res) => {
         res.status(500).json({ status: false, error: "Something went wrong on the server. Can't login try again later" });
     }
 
-}
+}  
 
 const indexView = async (req,res) => {
     try{
