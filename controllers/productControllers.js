@@ -17,8 +17,6 @@ const  addProduct = async (req,res) =>{
     if(name == '' || price<1 || description == ''){
       console.log('was empty')
       let notFilled = true
-      let unsuccess = true
-    //   res.redirect(`/admin/add-product?notFilled=${notFilled}`);
       res.render("admin/add-product",{notFilled,category})
     }else{
       const categoryId = req.body.category;
@@ -39,14 +37,12 @@ const  addProduct = async (req,res) =>{
           stock: parseInt(stockSmall) || 0
         }
       }
-      console.log('0000000000000000000')
-  
-          console.log('1111111111111111111')
+
           
               const categoryConnect = await CategoryModel.findOne({name:req.body.category})
           
               console.log(req.files) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          console.log('2222222222222222222')
+
               const images = req.files
                                   .filter((file) =>
                                         file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp")
@@ -63,7 +59,7 @@ const  addProduct = async (req,res) =>{
                     listStatus:true,
                     deleteStatus:false,
                   }
-                  console.log('33333333333333333333333')
+
                   console.log(data);
                   let product = await ProductModel.create(data);
                 
@@ -125,34 +121,33 @@ const listUnlistProduct = async(req,res)=>{
 
 
 const editedProductDetails = async (req,res)=>{
-  const {id, name, price , description, stockLarge, stockMedium, stockSmall, category } = req.body;
+    const {id, name, price , description, stockLarge, stockMedium, stockSmall, categoryId } = req.body;
+    console.log(req.files,'req.filews')
 
-
-  const sizeStock = {
-    sizeLarge:{
-      stock: stockLarge
-    },
-    sizeMedium: {
-      stock: stockMedium
-    },
-    sizeSmall:{
-      stock: stockSmall
+    const sizeStock = {
+        sizeLarge:{
+          stock: stockLarge
+        },
+        sizeMedium: {
+          stock: stockMedium
+        },
+        sizeSmall:{
+          stock: stockSmall
+        }
     }
-  }
- 
   
-  const images = req.files
-                        .filter((file) =>
-                            file.mimetype === "image/png" || file.mimetype === "image/webp" || file.mimetype === "image/jpeg")
-                        .map((file) => file.filename);
+  
+    const images = req.files
+                          .filter((file) =>
+                                file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp")
+                          .map((file) => file.filename);   
 
+    const existingProduct = await ProductModel.findById(id);
+    if(!existingProduct){
+        return res.status(404).send("Product not found.");
+    }
 
-  const existingProduct = await ProductModel.findById(id);
-  if(!existingProduct){
-    return res.status(404).send("Product not found.");
-  }
-
-
+    
 
   let c = 0
   for(let i = 0; i<3 ; i++){
@@ -172,12 +167,13 @@ const editedProductDetails = async (req,res)=>{
         price: price,
         description: description,
         sizeStock: sizeStock,
-        category: category,
-        imageUrl:[images[0],images[1],images[2]]
+        category: categoryId,
+        imageUrl:images
       };
-
+      console.log(updateData,'update data')
 
     const update = await ProductModel.updateOne({_id:id},{$set: updateData})
+    console.log(update,'updated')
     if(update){
       console.log('updated')
       let success = true
@@ -191,8 +187,9 @@ const editedProductDetails = async (req,res)=>{
 }
 
 const editProductDetailsView = async(req,res)=>{
-  const editProduct = await ProductModel.findOne({_id:req.query.id});
-  res.render("admin/edit-product-details",{editProduct});
+    const editProduct = await ProductModel.findOne({_id:req.query.id});
+    const category = await CategoryModel.find();
+    res.render("admin/edit-product-details",{editProduct,category});
 }
 
  
@@ -201,8 +198,7 @@ const deleteProduct = async(req,res)=>{
 
   const productID = req.params.id
   const product = await ProductModel.findById({_id:productID})
-  console.log(productID,'dddiddddddddd');
-  console.log(product,'dddddddddddddddddd')
+  const category = await CategoryModel.find({deleteStatus:false});
   if(!product){
     return res.status(404).json({message: "product not found."})
   }else{

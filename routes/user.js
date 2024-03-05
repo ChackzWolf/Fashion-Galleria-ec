@@ -50,8 +50,8 @@ router.get("/return-user-order",userStatusCheck,userControllers.returnUserOrder)
 router.get("/otp-pass",otpSend,userControllers.otpViewPass);
 
 //reports
-router.get("/report",userStatusCheck,userControllers.loadReport) //should work on it
-router.get("/report-generate",userStatusCheck,userControllers.generateReport) // should work on it
+router.get("/report",userControllers.loadReport) //should work on it
+router.get("/report-generate",userControllers.generateReport) // should work on it
 
 // others 
 router.get("/blog",userLoginVarify,userStatusCheck,userControllers.blogView);
@@ -61,7 +61,7 @@ router.get("/contact",userStatusCheck,userControllers.contactView);
 //post methods  ------------------
 router.post("/signupUser",userControllers.signupUser);
 router.post("/loginUser",userControllers.loginUser);
-router.post("/otpVerification",userControllers.otpVerification)
+// router.post("/otpVerification",userControllers.otpVerification)
 router.post("/change-product-quantity",userControllers.changeProductQuantity);
 router.post("/add-new-address",userControllers.addNewAddress);
 router.post("/edit-profile",userControllers.editProfile);
@@ -74,6 +74,7 @@ router.post("/verify-payment",userControllers.verifyPayment);
 router.post("/add-new-address-checkout",userControllers.addNewAddressCheckout);
 router.post("/coupon-validate",userControllers.couponValidate);
 
+router.post("/otpVerification",userControllers.verifyOTP)
 // router.post("/change-password",userControllers.changePassword);
 
 module.exports = router;

@@ -342,16 +342,6 @@ Admin
               <i class="bi bi-layout-text-window-reverse"></i><span>Show All Category</span></i>
             </a>
           </li>
-          <li>
-            <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/listedCategory">
-              <i class="bi bi-layout-text-window-reverse"></i><span>Show Listed Category</span></i>
-            </a>
-          </li>
-          <li>
-            <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/unlistedCategory">
-              <i class="bi bi-layout-text-window-reverse"></i><span>Show Unlisted Category</span></i>
-            </a>
-          </li>
 
 
         </ul>
@@ -450,11 +440,7 @@ Admin
               <i class="bi bi-layout-text-window-reverse"></i><span>Banner list</span></i>
             </a>
           </li>
-          <li>
-            <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/return-non-defective">
-              <i class="bi bi-layout-text-window-reverse"></i><span>Return Non-Defective</span></i>
-            </a>
-          </li>
+ 
         </ul>
       </li><!-- End Forms Nav -->
 
@@ -496,31 +482,33 @@ Admin
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Users</h5>
+              {{!-- <h5 class="card-title">Users</h5> --}}
 
               <!-- Table with stripped rows -->
               <table class="table datatable">
                 <thead>
                   <tr>
-         
+                    <th scope="col">Name</th>
                     <th scope="col">Order ID</th>
                     <th scope="col">PinCode</th>
                     <th scope="col">Date</th>
                     <th scope="col">Amount</th>
-                    <th scope="col">Status</th>
+                    
 
                   </tr>
                 </thead>
                 <tbody>
                   {{#each returnDefective}}
+                  {{#each products}}
+                  {{#if (eq status "returnAcceptDef")}}
                   <tr>
-           
-                    <td>{{orderId}}</td>
-                    <td>{{address.pincode}}</td>
-                    <td>{{date}}</td>
-
-                    <td>{{amount}}</td>
-                    <td>Defective</td>
+                    <td>{{name}}</td>
+                    <td>{{../orderId}}</td>
+                    <td>{{../address.pincode}}</td>
+                    <td>{{../date}}</td>
+                    <td>{{status}}</td>
+                    <td>{{price}}</td>
+                
 
                   </tr>
                   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -543,6 +531,8 @@ Admin
                       </div>
                     </div>
                   </div>
+                  {{/if}}
+                  {{/each}}
                   {{/each}}
                 </tbody>
               </table>

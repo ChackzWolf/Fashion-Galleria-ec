@@ -27,14 +27,36 @@
         </thead>
         <tbody>
             {{#each recentOrders}}
+            {{#each products}}
             <tr>
-                <td>{{@key}}</td>
-                <td>{{orderId}}</td>
-                <td>{{date}}</td>
-                <td>{{paymentMethod}}</td>
-                <td>{{status}}</td>
-                <td data-order="1000">{{amount}}</td>
+                <td>{{increment @key}}</td>
+                <td>{{../orderId}}</td>
+                <td>{{../date}}</td>
+                <td>{{../paymentMethod}}</td>
+
+                {{#if (eq status 'returnAcceptDef')}}
+                <td>Returned</td>
+                {{/if}}
+                {{#if (eq status 'returnAcceptNonDef')}}
+                <td>Defective</td>
+                {{/if}}
+                {{#if (eq status 'returnDefective')}}
+                <td>Return requested</td>
+                {{/if}}
+                {{#if (eq status 'returnNonDefective')}}
+                <td>Defective report</td>
+                {{/if}}
+
+                {{#if (eq status 'delivered')}}
+                <td>Delivered</td>;
+                {{/if}};
+                {{#if (eq status 'pending')}}
+                <td>Pending</td>
+                {{/if}}
+
+                <td data-order="1000">{{price}}</td>
             </tr>
+            {{/each}}
             {{/each}}
 
         </tbody>

@@ -198,20 +198,12 @@
                     <nav class="header__menu">
                         <ul>
                             <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="#women">Women's</a></li>
+
                              
 
                             
                             <li><a href="/shop">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                {{!-- <ul class="dropdown">
-                                    <li><a href="/orders">View orders</a></li>
-                                    <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                    <li><a href="./checkout.html">Checkout</a></li>
-                                
-                                </ul> --}}
-                            </li>
+
                             <li><a href="/blog">Blog</a></li>
                             {{!-- <li><a href="/contact">Contact</a></li> --}}
                         </ul>
@@ -226,18 +218,9 @@
 
                         <ul class="header__right__widget">
                             <li>
-                                <div class="fas fa-search" onclick="toggleSearch()">
-                                    <!-- Unicode for magnifying glass icon -->
-                                </div>
-                                <div class="search-container">
-                                    <div class="search-box">
-                                        <!-- Your search input and other content here -->
-                                        <input type="text" placeholder="Search...">
-                                    </div>
-                                </div>
+
                             </li>
-                            <li><a href="#"><i class="fas fa-heart"></i>
-                            </a></li>
+                        
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
                                 {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
                             </a></li>
@@ -275,9 +258,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="user/index"><i class="fa fa-home"></i> Home</a>
-                        <a href="#">Women’s </a>
-                        <span>Essential structured blazer</span>
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                        <a href="/shop">Shop</a>
+                        <span>Product Details</span>
                     </div>
                 </div>
             </div>
@@ -336,7 +319,7 @@
                             <div class="quantity">
                                 <span>Quantity:</span>
                                 <div class="pro-qty">
-                                    <input type="text" value="1" min="1">
+                                    <input id="count" type="text" name="count" value="1" min="1">
                                 </div>
                             </div>
                             <button onclick="addToCart('{{singleProduct._id}}')"  class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</button>
@@ -742,6 +725,8 @@
     <script>
         function addToCart(id) {
             const selectedSize = document.querySelector('input[name="size"]:checked');
+const countInput = document.getElementById('count'); // Get the count input element
+    const quantity = countInput.value; // Get the value of the count input
 
             if (!selectedSize) {
               // Show the modal if no size is selected
@@ -749,7 +734,7 @@
               return;  // Stop the function if no size is selected
             }
             const selectedValue = selectedSize.value;
-            const returnUrl = `/addToCart?id=${id}&size=${selectedValue}`;
+            const returnUrl = `/addToCart?id=${id}&size=${selectedValue}&count=${quantity}`;
             window.location.href = returnUrl;
         }
 

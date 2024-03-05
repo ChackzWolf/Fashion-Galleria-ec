@@ -342,16 +342,7 @@
               <i class="bi bi-layout-text-window-reverse"></i><span>Show All Category</span></i>
             </a>
           </li>
-          <li>
-            <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/listedCategory">
-              <i class="bi bi-layout-text-window-reverse"></i><span>Show Listed Category</span></i>
-            </a>
-          </li>
-          <li>
-            <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/unlistedCategory">
-              <i class="bi bi-layout-text-window-reverse"></i><span>Show Unlisted Category</span></i>
-            </a>
-          </li>
+
 
 
         </ul>
@@ -450,11 +441,7 @@
               <i class="bi bi-layout-text-window-reverse"></i><span>Banner list</span></i>
             </a>
           </li>
-          <li>
-            <a class="nav-link collapsed" data-bs-target="#tables-nav2" href="/admin/return-non-defective">
-              <i class="bi bi-layout-text-window-reverse"></i><span>Return Non-Defective</span></i>
-            </a>
-          </li>
+
         </ul>
       </li><!-- End Forms Nav -->
 
@@ -496,7 +483,7 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Users</h5>
+              {{!-- <h5 class="card-title">Users</h5> --}}
 
               <!-- Table with stripped rows -->
               <table class="table datatable">
@@ -516,6 +503,7 @@
                 <tbody>
                   {{#each returnPending}}
                   {{#each products}}
+                  {{#if (or status "returnDefective" "returnNonDefective")}}
                   <tr>
                     <th scope="row"> {{increment @key}}</th>
                     <td>{{../orderId}}</td>
@@ -528,7 +516,8 @@
                     <td>{{price}}</td>
                     {{#if (eq status "returnDefective")}}
                     <td>Defective</td>
-                    {{else}}
+                    {{/if}}
+                    {{#if (eq status "returnNonDefective")}}
                     <td>Non Defective</td>
                     {{/if}}
                     <td>
@@ -557,6 +546,7 @@
                       </div>
                     </div>
                   </div>
+                  {{/if}}
                   {{/each}}
                   {{/each}}
                 </tbody>

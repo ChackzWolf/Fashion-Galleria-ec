@@ -9,7 +9,7 @@ const adminLoginChecker = (req,res,next)=>{
         }else{
             return res.redirect("/admin/login")
         }
-    }catch{
+    }catch(error){
         res.status(500).json({error: "Failed to check "});
 
     }
@@ -25,7 +25,7 @@ const userStatusCheck = async(req,res,next)=>{
         }else{
             return res.redirect("/admin/login")
         }
-    }catch{
+    }catch(error){
         res.status(500).json({error: "Failed to check permission status "});
     }
 }
@@ -39,7 +39,7 @@ const adminLoginVarify = (req,res,next) =>{
         }else{
             next()
         }
-    }catch{
+    }catch(error){
         res.status(500).json({error: "Login verification error."});
     }
 
@@ -52,7 +52,7 @@ const userLoginVarify = (req,res,next)=>{
         }else{
             return res.redirect('/login')
         }
-    }catch{
+    }catch(error){
         res.status(500).json({error: "Login verification error. "});
 
     }
@@ -65,7 +65,7 @@ const userLoginChecker = (req,res,next) =>{
         }else{
             next()
         }
-    }catch{
+    }catch(error){
         res.status(500).json({error: "Login checker error."});
     }
 }

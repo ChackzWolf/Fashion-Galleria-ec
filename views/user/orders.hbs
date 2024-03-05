@@ -150,9 +150,9 @@
         <div class="offcanvas__close">+</div>
         <ul class="offcanvas__widget">
             {{!-- <li><span class="icon_search search-switch"></span></li> --}}
-            <li>
+            {{!-- <li>
                 <a href="/wishlist"><i class="fas fa-heart"></i></a>
-            </li>
+            </li> --}}
             <li>
                 <a href="/cart"><i class="fas fa-shopping-bag"></i>
                  {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
@@ -190,14 +190,14 @@
 
                             
                             <li><a href="/shop">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
+                            {{!-- <li><a href="#">Pages</a> --}}
+                                {{!-- <ul class="dropdown">
                                     <li><a href="/orders">View orders</a></li>
                                     <li><a href="/cart">Shop Cart</a></li>
                     
                                 
                                 </ul>
-                            </li>
+                            </li> --}}
 
                         </ul>
                     </nav>
@@ -210,19 +210,9 @@
                         </div> --}}
 
                         <ul class="header__right__widget">
-                            <li>
-                                <div class="fas fa-search" onclick="toggleSearch()">
-                                    <!-- Unicode for magnifying glass icon -->
-                                </div>
-                                <div class="search-container">
-                                    <div class="search-box">
-                                        <!-- Your search input and other content here -->
-                                        <input type="text" placeholder="Search...">
-                                    </div>
-                                </div>
-                            </li>
-                            <li><a href="#"><i class="fas fa-heart"></i>
-                            </a></li>
+
+                            {{!-- <li><a href="#"><i class="fas fa-heart"></i>
+                            </a></li> --}}
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
                                               {{#if (gt cartCount 0)}}<div class="tip">{{cartCount}}</div></a>{{/if}}
 
@@ -309,7 +299,25 @@
                     <th scope="row">{{increment @key}}</th>
                     <td>{{name}}</td>
                     <td>{{../address.pincode}}</td>
-                    <td>{{status}}</td>
+                    {{#if (or status "returnAcceptDef" "returnAcceptNonDef")}}
+                    <td>Return accepted</td>
+                    {{/if}}
+                    {{#if (eq status 'pending')}}
+                    <td>Order pending</td>
+                    {{/if}}
+        
+                    {{#if (or status "returnNonDefective" "returnDefective")}}
+                    <td>Requested return</td>
+                    {{/if}}
+
+                    {{#if (eq status 'delivered')}}
+                    <td>Delivered</td>
+                    {{/if}}
+
+                    {{!-- <td>{{this.status}}</td> --}}
+                    {{#if (eq status 'shipped')}}
+                    <td>Shipped</td>
+                    {{/if}}
 
                     <td>{{../date}}</td>
                     <td>{{price}}</td>
@@ -334,13 +342,8 @@
                       {{/if}}
 
 
-                      {{#if (eq status "returnAcceptDef")}}
-                      <button type="button" class="btn btn-info" data-mdb-toggle=""
-                        data-mdb-target="#exampleModal2{{@key}}">Returned</button>
-                      {{/if}}
-                      {{#if (eq status "returnAcceptNonDef")}}
-                      <button type="button" class="btn btn-info" data-mdb-toggle=""
-                        data-mdb-target="#exampleModal2{{@key}}">Returned</button>
+                      {{#if (or status "returnAcceptDef" "returnAcceptNonDef")}}
+                      <a href="" style="color:rgb(0, 189, 6); pointer-events: none;" disabled> Returned</a>
                       {{/if}}
                       {{#if (eq status "delivered")}}
                       <a href="" style="color:rgb(0, 189, 6); pointer-events: none;" disabled> Delivered</a>

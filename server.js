@@ -69,8 +69,22 @@ hbs.registerHelper("inc", function(value, options)
 hbs.registerHelper('increment', function(value) {
   return value + 1;
 });
+hbs.registerHelper('isReturnStatus', function(status) {
+    return status === "returnDefective" || status === "returnNonDefective";
+});
 
-
+hbs.registerHelper('or', function (value, ...args) {
+  // Check if value matches any of the provided arguments
+  for (let i = 0; i < args.length; i++) {
+     if (value === args[i]) {
+       // If a match is found, return true
+       return true;
+     }
+  }
+  // If no match is found, return false
+  return false;
+ });
+ 
 
 app.use(function(req, res, next) {
     res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');

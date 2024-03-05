@@ -145,47 +145,27 @@
     margin-top: 20px; /* Adjust margin to create space between the main content and footer */
     /* Add any other styling for the footer */
 }/* Add any other styling for the footer */
-}
+
 
 
     </style>
 
-{{!-- 
-    for search box --}}
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
 
-        .search-container {
-            position: fixed;
-            top: 11%;
-            
-            right: -300px; /* Initial position off-screen */
-            transform: translateY(-50%);
-            transition: right 0.3s ease;
-        }
-
-        .search-box {
-            width: 300px;
-            padding: 10px;
-            box-sizing: border-box;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-icon {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-    </style>
-    {{!-- end search box --}}
     <!-- Custom CSS for transparent heart with border -->
     <style>
+
+              .invalid {
+    border-color: red;
+}
+
+.invalid-feedback {
+    display: none;
+}
+
+.invalid + .invalid-feedback {
+    display: block;
+    color: red;
+}
       .IconColor {
         border: 2px solid rgb(47, 47, 47);
       }
@@ -407,6 +387,7 @@
               <p class="text-center text-danger small">{{isPasswordValid}}</p>
               <p class="text-center text-danger small">{{wrongPassword}}</p>
               <p class="text-center text-success small">{{successMessage}}</p>
+              <p class="text-center text-danger small">{{validation}}</p>
 
               {{#if msgProfile}}
 
@@ -551,6 +532,7 @@
 
 
                     <div class="card text-center">
+              <p class="text-center text-danger small">{{validation}}</p>
 
                       {{#each newAddress.address}}
                       {{#if default}}
@@ -592,7 +574,7 @@
                       <div class="modal-content">
 
                         <div class="modal-body mx-3">
-                          <form action="/add-new-address" method="post" class="row g-3 needs-validation" novalidate>
+                          <form action="/add-new-address" id="addressForm"  method="post" class="row g-3 needs-validation" novalidate>
                             <div class="col-12">
                               <label for="yourName" class="form-label">Your Name</label>
                               <input type="text" name="name" class="form-control" id="yourName" required>
@@ -846,7 +828,37 @@
     <script src="assets/js/custom.js"></script>
 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('addressForm');
 
+    form.addEventListener('submit', function(event) {
+        // Check if the form is valid
+        if (!form.checkValidity()) {
+            event.preventDefault(); // Prevent form submission
+            event.stopPropagation(); // Stop the event from propagating further
+
+            // Manually trigger the browser's validation UI
+            form.classList.add('was-validated');
+        }
+    }, false);
+});
+
+// Inside your submit event listener
+if (!form.checkValidity()) {
+    // Your existing code to prevent form submission
+
+    // Manually show validation feedback
+    form.querySelectorAll('input').forEach(function(input) {
+        if (!input.checkValidity()) {
+            input.classList.add('invalid');
+        } else {
+            input.classList.remove('invalid');
+        }
+    });
+}
+
+</script>
 </body>
 
 </html>

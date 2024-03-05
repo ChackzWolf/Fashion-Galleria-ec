@@ -77,7 +77,7 @@ const adminChartLoad = async (req, res) => {
            console.log("session deleted")
            res.redirect("/admin/login")
            }) ;
-    }catch{
+    }catch(error){
        res.status(500).render("user/error-handling");
     }
 }
@@ -114,12 +114,9 @@ const userList = async (req,res)=>{
 
 const addCategory = async(req,res)=>{
     try{
-        const pageNum =  req.query.page;
-        const perPage = 4
-        let docCount
-        let pages
+
         const category = await CategoryModel.find().skip((pageNum - 1) * perPage).limit(perPage);
-        const documents = await CategoryModel.countDocuments()
+
 
         res.render("admin/add-category",{category});
     }catch(error){
@@ -130,7 +127,7 @@ const addCategory = async(req,res)=>{
 
 const addProductView = async(req,res)=>{
     try{
-        const category = await CategoryModel.find()
+        const category = await CategoryModel.find({deleteStatus:false})
         res.render("admin/add-product",{category})
     }catch(error){
         res.status(500).render("user/error-handling");
@@ -146,7 +143,7 @@ const editProductView = async(req,res) =>{
         let pages
 
         const products = await ProductModel.find({deleteStatus:false}).populate('category').skip((pageNum - 1) * perPage).limit(perPage)
-        const category = await CategoryModel.find()
+        const category = await CategoryModel.find({deleteStatus:false})
         const documents = await ProductModel.countDocuments({deleteStatus:false});
 
 
@@ -589,7 +586,7 @@ const returnPending =  async (req,res)=>{
         }
 
         res.render("admin/return-pending",{returnPending,countPages})
-    }catch{
+    }catch(error){
         res.status(500).render("user/error-handling")
     }
 }
@@ -601,8 +598,21 @@ const returnDefective = async(req,res)=>{
         const perPage = 6
         let docCount
         let pages
-        const returnDefective = await OrderModel.find({status:'returnAcceptDef'}).skip((pageNum - 1) * perPage).limit(perPage)
-        const documents = await OrderModel.countDocuments({status:'returnAcceptDef'})
+        // const returnDefective = await OrderModel.find({status:'returnAcceptDef'}).skip((pageNum - 1) * perPage).limit(perPage)
+        const returnDefective = await OrderModel.find({
+            products: {
+                $elemMatch: {
+                    status:'returnAcceptDef'
+                }
+            }
+        }).skip((pageNum - 1) * perPage).limit(perPage);
+        const documents = await OrderModel.countDocuments({
+            products: {
+                $elemMatch: {
+                    status:'returnAcceptDef'
+                }
+            }
+        })
         docCount = documents
         pages = Math.ceil(docCount / perPage)
 
@@ -679,10 +689,63 @@ const returnAccept = async (req, res) => {
         let docCount
         let pages
 
-        const orderId = req.query.orderId
-        const productId = req.query.productId
+        const {orderId,productId,status} = req.query;
         console.log(productId,'productId');
         console.log(orderId,'orderId');
+        console.log(status,'status')
+        const orderDetails = await OrderModel.findOne({_id:orderId});
+        const currentDate = new Date();
+        const formattedDate = formatDate(currentDate);
+
+        
+        // Access the price of the first matching product
+        const price = await adminFunc.getOrderPrice(orderId,productId)
+        console.log(price,'price')
+
+
+        if(status === 'returnDefective'){
+            console.log('defective order ')
+            // updating order status here to return accept defective product (returnAcceptDef) 
+            // const check = await OrderModel.updateOne(
+            //     {
+            //         _id:orderId,  'products._id':productId
+            //     },
+            //     { 
+            //         $set: { 'products.$.status': 'returnAcceptDef' }
+            //     });
+            const check = await OrderModel.updateOne(
+                {
+                    _id:orderId,'products._id':productId
+                },
+                {
+                     $set: { 'products.$.status': 'returnAcceptDef' }
+                    });
+            console.log(check, 'update?')
+        }else{
+            console.log('order nondefective')
+          // updating order status here ot return accept non-defective product (returnAcceptNonDef)
+          const check = await OrderModel.updateOne(
+            {
+                _id:orderId,  'products._id':productId
+            },
+            { 
+                $set: { 'products.$.status': 'returnAcceptNonDef' }
+            });
+            console.log(check, 'update?')
+        }
+        const transaction = {
+            transaction:"Credited",
+            amount:price,
+            reason:"Return Refund",
+            date:formattedDate,
+            orderId:orderDetails.orderId
+        }
+        console.log(price,'price')
+        const walletUpdate = await UserModel.updateOne({ _id: orderDetails.userId }, { $inc: { wallet: orderDetails.amount } }); // Here I'm adding back the amount to the user's wallet.
+        await UserModel.updateOne({_id:orderDetails.userId},{$push:{walletHistory:transaction}}) // here I'm journaling transaction history to the user model
+
+
+
         const documents = await OrderModel.countDocuments({
             products: {
                 $elemMatch: {
@@ -690,9 +753,7 @@ const returnAccept = async (req, res) => {
                 }
             }
         })
-        const status = req.query.status
-        const order = await OrderModel.findOne({_id:orderId});
-        // const returnPending = await OrderModel.find({status:{$in:['returnNonDefective','returnDefective']}})
+
         const returnPending = await OrderModel.find({
             products: {
                 $elemMatch: {
@@ -700,8 +761,6 @@ const returnAccept = async (req, res) => {
                 }
             }
         }).skip((pageNum - 1) * perPage).limit(perPage);
-
-
         docCount = documents
         pages = Math.ceil(docCount / perPage)
 
@@ -710,54 +769,7 @@ const returnAccept = async (req, res) => {
 
             countPages[i] = i + 1
         }
-        
-        const orderDetails = await OrderModel.findOne({_id:orderId});
-        const currentDate = new Date();
-        const formattedDate = formatDate(currentDate);
-    
-        const product = await OrderModel.find({
-            products: {
-                $elemMatch: {
-                    _id: productId
-                }
-            }
-        }, {
-            'products.$':  1 // Projection to get the matched product
-        }).lean(); // Convert the result to plain JavaScript objects
-        
-        // Access the price of the first matching product
-        const price = await adminFunc.getOrderPrice(orderId,productId)
-    
-        if(status === 'returnDefective'){
 
-            // updating order status here to return accept defective product (returnAcceptDef) 
-            await OrderModel.updateOne(
-                {
-                    _id:orderId,  'products._id':productId
-                },
-                { 
-                    $set: { 'products.$.status': 'returnAcceptDef' }
-                });
-            
-        }else{
-          // updating order status here ot return accept non-defective product (returnAcceptNonDef)
-          await OrderModel.updateOne(
-            {
-                _id:orderId,  'products._id':productId
-            },
-            { 
-                $set: { 'products.$.status': 'returnAcceptNonDef' }
-            });
-        }
-        const transaction = {
-            transaction:"Credited",
-            amount:price,
-            orderId:orderDetails.orderId,
-            date:formattedDate
-        }
-        console.log(price,'price')
-        const walletUpdate = await UserModel.updateOne({ _id: orderDetails.userId }, { $inc: { wallet: orderDetails.amount } }); // Here I'm adding back the amount to the user's wallet.
-        await UserModel.updateOne({_id:orderDetails.userId},{$push:{walletHistory:transaction}}) // here I'm journaling transaction history to the user model
 
         // Check the result of the update
         if (walletUpdate) {
@@ -939,7 +951,7 @@ const editProductOfferView = async(req,res)=>{
         // percentage defference of orginal value and discount value
         const percentage = adminFunc.calculatePercentageDifference(singleProduct.price, singleProduct.offerPrice)
         res.render("admin/edit-product-offer-view",{singleProduct,percentage});
-    }catch{
+    }catch(error){
         res.status(500).render("user/error-handling"); 
     }
 }
@@ -954,7 +966,7 @@ const removeProductOffer = async(req,res)=>{
         const productsOffer = await ProductModel.find({productOffer:true});
         const productsNoOffer = await ProductModel.find({productOffer:false});
         res.render("admin/product-offer-list",{productsOffer,productsNoOffer,removed})
-    }catch{
+    }catch(error){
         res.status(500).render("user/error-handling"); 
     }
 }
@@ -963,7 +975,7 @@ const mainBannerView = async(req,res)=>{
     try{
         const banner = await BannerModel.findOne()
         res.render("admin/main-banner-view",{banner})
-    }catch{
+    }catch(error){
         res.status(500).render("user/error-handling"); 
     }
 }

@@ -27,7 +27,7 @@
             <p class="text-center text-danger small">Wrong OTP.Try again</p>
             {{/if}}
 
-            <form action="/otpVerification" method="post">
+            <form id="otpForm">
               <div class="otp-field mb-4">
                 <input name="otpNum1" type="number" />
                 <input name="otpNum2" type="number" disabled />
@@ -91,6 +91,49 @@ window.onload = function() {
       crossorigin="anonymous"></script>
 
     <script src="js/otp.js"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#otpForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Collect the OTP numbers from the form
+        const otpNum1 = $('input[name="otpNum1"]').val();
+        const otpNum2 = $('input[name="otpNum2"]').val();
+        const otpNum3 = $('input[name="otpNum3"]').val();
+        const otpNum4 = $('input[name="otpNum4"]').val();
+        const otpNum5 = $('input[name="otpNum5"]').val();
+        const otpNum6 = $('input[name="otpNum6"]').val();
+
+        // Combine the OTP numbers into a single string
+        const otp = otpNum1 + otpNum2 + otpNum3 + otpNum4 + otpNum5 + otpNum6;
+
+        // Send the OTP to the server for verification
+        $.ajax({
+            url: '/otpVerification', // The endpoint to send the OTP to
+            type: 'POST',
+            data: { otp: otp }, // The data to send to the server
+            success: function(response) {
+                // Handle the response from the server
+                if (response.success) {
+                    window.location.href = '/'
+                    // Redirect or perform other actions as needed
+                } else {
+                    alert('OTP verification failed. Please try again.');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle any errors that occur during the request
+                console.error('Error verifying OTP:', textStatus, errorThrown);
+                alert('Wrong OTP. Please try again.');
+            }
+        });
+    });
+});
+</script>
+
   </body>
 
 

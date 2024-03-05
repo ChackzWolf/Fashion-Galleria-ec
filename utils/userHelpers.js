@@ -7,6 +7,40 @@ const AddressModel = require("../models/Address");
 const formatDate = require("./dateGenerator");
 const UserModel = require("../models/User")
 
+const detailsValidation= (details)=> {
+    // Check if all required fields are present
+    if (!details.name || !details.email || !details.number || !details.address || !details.state || !details.city || !details.pincode) {
+        return { isValid: false, message: "All fields are required." };
+    }
+    const nameRegex = /^[a-zA-Z]+$/;
+    if (!nameRegex.test(details.name)) {
+        return "Name must contain only letters.";
+    }
+
+    // Name validation: At least 3 characters
+    if (details.name.length < 3) {
+        return "Name must be at least 3 characters long." ;
+    }
+
+    // Email validation: Simple regex check, consider using a more robust method for production
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(details.email)) {
+        return "Please enter a valid email address." 
+    }
+
+    // Mobile number validation: 10 digits
+    if (!/^\d{10}$/.test(details.number)) {
+        return "Mobile number must be 10 digits long."
+    }
+
+    // Pincode validation: 6 digits
+    if (!/^\d{6}$/.test(details.pincode)) {
+        return  "Please enter a valid pincode"; 
+    }
+    // If all checks pass, return true
+    return 'done'
+}
+
 function validateName(name) {
     try{    
         // Check if the name is empty
@@ -26,7 +60,7 @@ function validateName(name) {
 
         // Name is valid
         return "";
-    }catch{
+    }catch(error){
         console.log("password validation error.")
         return false; // Return false in case of an error
     }
@@ -50,7 +84,7 @@ function validatePhoneNumber(phoneNumber) {
     
         // Phone number is valid
         return "";
-    }catch{
+    }catch(error){
         console.log("password validation error.")
         return false; // Return false in case of an error
 
@@ -62,7 +96,7 @@ function validateEmail(email) {
         // Regular expression for validating an email address
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
-    }catch{
+    }catch(error){
         console.log("email validation error.")
         return false; // Return false in case of an error
 
@@ -106,7 +140,7 @@ const validatePassword = (password)=> {
 
         // Password meets all requirements
         return "";
-    }catch{
+    }catch(error){
         console.log("password validation error.")
         return false; // Return false in case of an error
 
@@ -299,7 +333,7 @@ const getProducts = async(userId)=>{
             }
         ])
         return cartItems
-    }catch{
+    }catch(error){
         console.log("gets products error.");
         return false; // Return false in case of an error
 
@@ -356,46 +390,99 @@ const stockQuantityUpdate = async(req,res)=>{
 
 
 /// this funciton is for update address and manage address.
-const newAddressManagement = async (details,userId)=>{
-    try{
-        const {name,email,number,address, city, state, pincode} = details;
-        const newAddress = {
-            name:name,
-            email:email,
-            number:number,
-            address:address,
-            city:city,
-            state:state,
-            pincode:pincode,
+// const newAddressManagement = async (details,userId)=>{
+//     try{
+//         const {name,email,number,address, city, state, pincode} = details;
+//         const newAddress = {
+//             name:name,
+//             email:email,
+//             number:number,
+//             address:address,
+//             city:city,
+//             state:state,
+//             pincode:pincode,
+//         }
+//         console.log(newAddress)
+//         console.log('step1')
+//         const addressExists = await AddressModel.findOne({userId:userId})
+//         if(addressExists){
+//             console.log('account exists')
+//             const updateAddress = await AddressModel.updateOne({userId:userId},{$push:{address:newAddress}})
+//             if(updateAddress){
+//                 return true
+//             }
+//         }else{
+//             console.log("account don't exists")
+//             let data={
+//                 userId: userId,
+//                 address:[newAddress]
+//             }
+//             console.log(data);
+//             const updateAddress = await AddressModel.create(data);
+//             if(updateAddress){
+//                 return true
+//             }else{
+//                 return false
+//             }
+//         }
+//     } catch (error) {
+//             console.error("Error in changeProductQuantity:", error);
+//             return false; // Return false in case of an error
+//         }    
+// }
+
+const newAddressManagement = async (details, userId) => {
+    try {
+        // Validate required fields
+        const { name, email, number, address, city, state, pincode } = details;
+        if (!name || !email || !number || !address || !city || !state || !pincode) {
+            console.error("Missing required fields");
+            return false;
         }
-        console.log(newAddress)
-        console.log('step1')
-        const addressExists = await AddressModel.findOne({userId:userId})
-        if(addressExists){
-            console.log('account exists')
-            const updateAddress = await AddressModel.updateOne({userId:userId},{$push:{address:newAddress}})
-            if(updateAddress){
-                return true
-            }
-        }else{
-            console.log("account don't exists")
-            let data={
-                userId: userId,
-                address:[newAddress]
-            }
-            console.log(data);
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            console.error("Invalid email format");
+            return false;
+        }
+
+        // Optionally, validate phone number format
+        // const phoneRegex = /^\d{10}$/; // Example for a 10-digit phone number
+        // if (!phoneRegex.test(number)) {
+        //     console.error("Invalid phone number format");
+        //     return false;
+        // }
+
+        const newAddress = {
+            name,
+            email,
+            number,
+            address,
+            city,
+            state,
+            pincode,
+        };
+
+        const addressExists = await AddressModel.findOne({ userId });
+        if (addressExists) {
+            console.log('Account exists');
+            const updateAddress = await AddressModel.updateOne({ userId }, { $push: { address: newAddress } });
+            return updateAddress.nModified > 0;
+        } else {
+            console.log("Account doesn't exist");
+            const data = {
+                userId,
+                address: [newAddress],
+            };
             const updateAddress = await AddressModel.create(data);
-            if(updateAddress){
-                return true
-            }else{
-                return false
-            }
+            return !!updateAddress;
         }
     } catch (error) {
-            console.error("Error in changeProductQuantity:", error);
-            return false; // Return false in case of an error
-        }    
-}
+        console.error("Error in newAddressManagement:", error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+};
 
 
 const paymentVarification = (details)=>{
@@ -410,7 +497,7 @@ const paymentVarification = (details)=>{
         }else{
             return false;
         }
-    }catch{
+    }catch(error){
         return false; // Return false in case of an error
 
     }
@@ -446,7 +533,7 @@ const generateRandomReferenceId = () => {
         const referenceId = `${randomNumber}${randomLetters}`;
 
         return referenceId;
-    }catch{
+    }catch(error){
 console.log(error)  
 return false; // Return false in case of an error
 
@@ -487,7 +574,7 @@ const referenceIdApplyOffer = async(referenceId)=>{
             return false;
         }
     }
-    catch{
+    catch(error){
         console.error(error)
         return false; // Return false in case of an error
 
@@ -529,5 +616,6 @@ module.exports = {
     validateEmail,
     validateName,
     validatePhoneNumber,
-    getCartCount
+    getCartCount,
+    detailsValidation
 }

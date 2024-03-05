@@ -7,7 +7,7 @@ function calculatePercentageDifference(originalPrice, discountPrice) {
         result = Math.trunc(result);
         result = Math.abs(result);
         return result;
-    }catch{
+    }catch(error){
         console.log("calculatePercentageDifference() calculation error")
         res.status(500).json({error: "Internal error."});
 
@@ -22,7 +22,7 @@ function reducePercentageFromPrice(price, percentage) {
         let result = price-amount
         result = Math.trunc(result)
         return result;
-    }catch{
+    }catch(error){
         console.log("reducePercentageFromPrice() calculation error")
         res.status(500).json({error: "Internal error."});
     }
@@ -40,14 +40,16 @@ const getOrderPrice= async (orderId, productId)=>{
         }
         console.log(order,'orderrrrrrrr')
         const product = order.products
-        console.log(product,productId)
+        console.log(product,'product', productId,'productId');
+
         // Iterate over the product array
         for (let i = 0; i < product.length; i++) {
             console.log(i,'bign')
             // Check if the current product's productId matches the target productId
-            console.log(product[i],'kkkkkkk')
-            console.log(product[i].productId)
-            if (product[i].productId === productId) {
+            console.log(product[i].price,'kkkkkkk')
+            console.log(product[i].productId,'productId')
+            console.log(productId,'productId to match');
+            if (product[i].productId == productId) {
                 console.log(product[i].price,'price')
                 // If a match is found, return the price of the product
                 return product[i].price;

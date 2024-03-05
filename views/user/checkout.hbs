@@ -89,6 +89,18 @@
 {{!-- 
     for search box --}}
     <style>
+        .invalid {
+    border-color: red;
+}
+
+.invalid-feedback {
+    display: none;
+}
+
+.invalid + .invalid-feedback {
+    display: block;
+    color: red;
+}
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -209,7 +221,7 @@
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
                                 <div class="tip">2</div>
                             </a></li>
-                            
+
                             <li>
                                    <!-- User icon dropdown container -->
                                 <div class="user-dropdown">
@@ -469,6 +481,8 @@
                             <div class="text-center mt-3">
                                 <a href="" class="btn btn-default btn-rounded mb-4 btn-primary" data-toggle="modal"
                                     data-target="#modalLoginForm">Enter custom address</a>
+
+                                    <p style="font-size: small; color: red;">{{validation}}</p>
                             </div>
 
                         </div>
@@ -552,7 +566,7 @@
             <div class="modal-content">
 
                 <div class="modal-body mx-3">
-                    <form action="/add-new-address-checkout" method="post" class="row g-3 needs-validation" novalidate>
+                    <form id="addressForm" action="/add-new-address-checkout" method="post" class="row g-3 needs-validation" novalidate>
                         <div class="col-12">
                             <label for="yourName" class="form-label">Your Name</label>
                             <input type="text" name="name" class="form-control" id="yourName" required>
@@ -696,7 +710,7 @@ $('#closeButton').click(function() {
                       document.getElementById('discountPrice').innerText = response.discountTotal;
                   }
               })
-        }
+        } 
 
         async function clearCoupon() {
             var couponCodeInput = document.getElementById("couponCode");
@@ -872,7 +886,37 @@ $('#closeButton').click(function() {
 
 
     </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('addressForm');
 
+    form.addEventListener('submit', function(event) {
+        // Check if the form is valid
+        if (!form.checkValidity()) {
+            event.preventDefault(); // Prevent form submission
+            event.stopPropagation(); // Stop the event from propagating further
+
+            // Manually trigger the browser's validation UI
+            form.classList.add('was-validated');
+        }
+    }, false);
+});
+
+// Inside your submit event listener
+if (!form.checkValidity()) {
+    // Your existing code to prevent form submission
+
+    // Manually show validation feedback
+    form.querySelectorAll('input').forEach(function(input) {
+        if (!input.checkValidity()) {
+            input.classList.add('invalid');
+        } else {
+            input.classList.remove('invalid');
+        }
+    });
+}
+
+</script>
   <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
 </body>

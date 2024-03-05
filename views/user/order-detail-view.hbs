@@ -115,9 +115,9 @@
         <div class="offcanvas__close">+</div>
         <ul class="offcanvas__widget">
             {{!-- <li><span class="icon_search search-switch"></span></li> --}}
-            <li>
+            {{!-- <li>
                 <a href="/wishlist"><i class="fas fa-heart"></i></a>
-            </li>
+            </li> --}}
             <li>
                 <a href="/cart"><i class="fas fa-shopping-bag"></i>
                 <div class="tip">2</div></a>
@@ -153,10 +153,9 @@
 
                             
                             <li><a href="/shop">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                            </li>
+
                             <li><a href="/blog">Blog</a></li>
-                            <li><a href="/contact">Contact</a></li>
+
                         </ul>
                     </nav>
                 </div>
@@ -170,8 +169,8 @@
                         <ul class="header__right__widget">
 
                             </li>
-                            <li><a href="#"><i class="fas fa-heart"></i>
-                            </a></li>
+                            {{!-- <li><a href="#"><i class="fas fa-heart"></i>
+                            </a></li> --}}
                             <li><a href="/cart"><i class="fas fa-shopping-bag"></i>
                                 <div class="tip">2</div>
                             </a></li>
@@ -283,7 +282,6 @@
 
                     <th scope="col">Name</th>
                     <th scope="col">Price</th>
-                    <th scope="col">Count</th>
                     <th scope="col">Size</th>
                     <th scope="col">Status</th>
 
@@ -298,7 +296,7 @@
 
                     <td>{{this.name}}</td>
                     <td>₹ {{this.price}}</td>
-                    <td>{{this.count}}</td>
+      
                     {{#if (eq size "sizeSmall")}}
                     <td>Small</td>
                     {{/if}}
@@ -308,9 +306,26 @@
                     {{#if (eq size "sizeLarge")}}
                     <td>Large</td>
                     {{/if}}
-                    <td>{{this.status}}</td>
-
                     
+                    {{#if (or this.status "returnAcceptDef" "returnAcceptNonDef")}}
+                    <td>Return accepted</td>
+                    {{/if}}
+                    {{#if (eq status 'pending')}}
+                    <td>Order pending</td>
+                    {{/if}}
+        
+                    {{#if (or this.status "returnNonDefective" "returnDefective")}}
+                    <td>Requested return</td>
+                    {{/if}}
+
+                    {{#if (eq this.status 'delivered')}}
+                    <td>Delivered</td>
+                    {{/if}}
+
+                    {{!-- <td>{{this.status}}</td> --}}
+                    {{#if (eq this.status 'shipped')}}
+                    <td>Shipped</td>
+                    {{/if}}
                     <td>
                         {{#if (eq this.status "delivered")}}
                         

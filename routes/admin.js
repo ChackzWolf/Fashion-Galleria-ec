@@ -73,7 +73,6 @@ router.get("/list-unlist-banner/:id",adminControllers.listUnlistBanner);
 router.get("/delete-banner/:id",adminControllers.deleteBanner);
 
 
-
  /////////////////////////////////////////////////////////////////////////////////////////////
 //------------------------------------post methods-----------------------------------------//
 

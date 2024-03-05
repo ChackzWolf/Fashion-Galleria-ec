@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
             type:String
         },amount:{
             type:Number
-        },orderId:{
+        },reason:{
             type:String
         },date:{
             type:String

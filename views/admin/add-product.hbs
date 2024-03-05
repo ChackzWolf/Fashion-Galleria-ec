@@ -34,6 +34,7 @@
   <!-- Template Main CSS File -->
   <link href="/assetsAdmin/css/style.css" rel="stylesheet">
 
+<link rel="stylesheet" href="/cropperjs/cropper.css">
     <link rel="stylesheet" href="/assetsAdmin/css/side-bar-toggle.css">
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -608,6 +609,14 @@
                     </div>
                   </fieldset>
                 </div>
+
+              <div class="crop-container">
+                <div class="image-container">
+                  <img src="" alt="">
+                </div>
+              </div>
+
+
               <div style="display: flex; justify-content: center; align-items: center;">
                     <div style="max-width: 250px; max-height:500px">
                            <div style="width: 150px; height:215px;">
@@ -675,6 +684,18 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
 
+<script>
+  const image = document.getElementById('image');
+  const cropper = new Cropper(image, {
+      aspectRation:0,
+  });
+
+  document.querySelector('#btn-crop').addEventListener('click',function(){
+      var croppedImage = cropper.getCroppedCanvas().toDataUrl("image/png");
+      document.getElementById('output').src = croppedImage;
+      document.querySelector(".cropped-container").style.display = 'flex';
+  })
+</script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -725,7 +746,7 @@ if (success == 'true') {
   <script src="/assetsAdmin/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="/assetsAdmin/vendor/tinymce/tinymce.min.js"></script>
   <script src="/assetsAdmin/vendor/php-email-form/validate.js"></script>
-
+  <script src="/cropperjs/cropper.js" ></script>
   <!-- Template Main JS File -->
   <script src="/assetsAdmin/js/main.js"></script>
 
