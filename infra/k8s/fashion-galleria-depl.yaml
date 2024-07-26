@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fashion-galleria-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fashion-galleria
+  template:
+    metadata:
+      labels:
+        app: fashion-galleria
+    spec:
+      containers:
+        - name: fashion-galleria
+          image: jacksoncheriyan05/fashion-galleria
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fashion-galleria-srv
+spec:
+  type: NodePort
+  selector:
+    app: fashion-galleria
+  ports:
+    - name: fashion-galleria
+      protocol: TCP
+      port: 4000
+      targetPort: 3000
