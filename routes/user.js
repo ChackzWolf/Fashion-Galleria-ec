@@ -1,13 +1,13 @@
 const express = require("express")
 const {userLoginVarify,userLoginChecker,otpSend,userStatusCheck} = require("../middlewares/middlewares");
 const userControllers = require("../controllers/userControllers")
-const adminControllers =require("../controllers/adminControllers")
+const userManagementController = require("../controllers/adminControllers/user/userManagementController")
 const router = express.Router();
 
 //________________Get methods
 
 // index page
-router.get("/",userLoginVarify,userStatusCheck,userControllers.indexView);
+router.get("/",userStatusCheck,userControllers.indexView);
 
 // user logs
 router.get("/login",userLoginChecker,userControllers.loginView);
@@ -17,12 +17,12 @@ router.get("/userLogout",userLoginVarify,userControllers.userLogout);
 
 
 // products page
-router.get("/shop",userLoginVarify,userStatusCheck,userControllers.shopView);
+router.get("/shop",userStatusCheck,userControllers.shopView);
 router.get("/product-details",userStatusCheck,userControllers.productDetailsView);
 router.get("/search", userControllers.search);
 
 
-router.get("/searchUser",adminControllers.searchUser);
+router.get("/searchUser", userManagementController.searchUser);
 
 //cart
 router.get("/cart",userLoginVarify,userStatusCheck,userControllers.cartView);
@@ -32,7 +32,7 @@ router.get("/delete-cart-item",userStatusCheck,userLoginVarify,userControllers.d
 //check-out
 router.get("/checkout",userStatusCheck,userLoginVarify,userControllers.checkout);
 router.get("/remove-new-address-checkout",userLoginVarify,userStatusCheck,userControllers.removeAddressCheckout);
-router.get("/order-response",userStatusCheck,userControllers.orderResponseView);
+router.get("/order-response",userStatusCheck,userLoginVarify,userControllers.orderResponseView);
 
 //user profile
 router.get("/user-profile",userStatusCheck,userLoginVarify,userControllers.userProfile);
@@ -40,13 +40,13 @@ router.get("/default-address",userLoginVarify,userStatusCheck,userControllers.de
 router.get("/remove-new-address-user",userStatusCheck,userLoginVarify,userControllers.removeAddress);
 router.get('/email-verify',userControllers.emailVerify);
 router.get("/wallet-history",userStatusCheck,userLoginVarify,userControllers.walletHistory);
-router.get("/transaction-order-details-view",userStatusCheck,userControllers.transactionOrderDetailView);
+router.get("/transaction-order-details-view",userStatusCheck,userLoginVarify,userControllers.transactionOrderDetailView);
 
 //order management
 router.get("/orders",userLoginVarify,userStatusCheck,userControllers.ordersView);
-router.get("/order-detail-view",userStatusCheck,userControllers.orderDetailView);
-router.get("/cancel-user-order",userStatusCheck,userControllers.cancelUserOrder);
-router.get("/return-user-order",userStatusCheck,userControllers.returnUserOrder);
+router.get("/order-detail-view",userStatusCheck,userLoginVarify,userControllers.orderDetailView);
+router.get("/cancel-user-order",userStatusCheck,userLoginVarify,userControllers.cancelUserOrder);
+router.get("/return-user-order",userStatusCheck,userLoginVarify,userControllers.returnUserOrder);
 router.get("/otp-pass",otpSend,userControllers.otpViewPass);
 
 //reports
@@ -62,11 +62,11 @@ router.get("/contact",userStatusCheck,userControllers.contactView);
 router.post("/signupUser",userControllers.signupUser);
 router.post("/loginUser",userControllers.loginUser);
 // router.post("/otpVerification",userControllers.otpVerification)
-router.post("/change-product-quantity",userControllers.changeProductQuantity);
-router.post("/add-new-address",userControllers.addNewAddress);
-router.post("/edit-profile",userControllers.editProfile);
-router.post("/change-password",userControllers.changePassword);
-router.post("/place-order",userControllers.placeOrder);
+router.post("/change-product-quantity",userLoginVarify,userControllers.changeProductQuantity);
+router.post("/add-new-address",userLoginVarify,userControllers.addNewAddress);
+router.post("/edit-profile",userLoginVarify,userControllers.editProfile);
+router.post("/change-password",userLoginVarify,userControllers.changePassword);
+router.post("/place-order",userLoginVarify,userControllers.placeOrder);
 router.post("/email-verify-otp",userControllers.emailVerifyOtp);
 router.post("/changePassword",userControllers.createNewPasswrod);
 router.post("/otp-verify-passwordChange",userControllers.otpVerificationPassword);

@@ -503,7 +503,7 @@
               <p class="text-center text-danger small">Product adding failed.Try again</p>
               {{/if}}
               {{#if msgFilterErr}}
-              <p class="text-center text-danger small">Please add JPEG/PNG/WEBP format images</p>
+              <p class="text-center text-danger small">Please add JPEG/PNG/WEBP/avif format images</p>
               {{/if}}
               {{#if notFilled}}
               <p class="text-center text-danger small">You must fill all fields.</p>
@@ -624,7 +624,7 @@
                            </div>
 
                            <input type="file" name="image" id="image1" style="display: none;"
-                             onchange="displaySelectedImage(this,'previewImage1'); displayFileName('image1', this)" accept="image/png, image/webp, image/jpeg">
+                             onchange="displaySelectedImage(this,'previewImage1'); displayFileName('image1', this)" accept="image/png, image/webp, image/jpeg, image/avif">
                            <label for="image1"
                              style="padding: 8px 16px; font-size: 14px; font-weight: bold; color: #fff; background-color: #3498db; cursor: pointer; border-radius: 10px; border: none; text-align: center; display: inline-block; margin: 5px;">Image
                              1 <span id="image1Label"></span> </label><span class="close-button"

@@ -39,21 +39,26 @@ const loginView = (req,res) => {
 
 const indexView = async (req,res) => {
     try{
-        const userId = req.session.user._id;
-        const category = await CategoryModel.find()
-        const mensCategory = await CategoryModel.find({_id:'65996c9ed92f9b905b20f697'});
-        const womensCategory = await CategoryModel.find({_id:'65996cabd92f9b905b20f69d'})
-        const cartCount = await userFunc.getCartCount(userId);
+        const category = await CategoryModel.find()// hardcoding 
+        const mensCategory = await CategoryModel.find({_id:'65996c9ed92f9b905b20f697'});// hardcoding 
+        const womensCategory = await CategoryModel.find({_id:'65996cabd92f9b905b20f69d'});// hardcoding 
+        let cartCount = 0;
+        if(req.session.user !== undefined ) cartCount = await userFunc.getCartCount(req.session.user._id);
         console.log(cartCount, 'cart count')
        
 
         const products = await ProductModel.find({listStatus: true, deleteStatus: false}).limit(8)
+        console.log('2',products)
         const mensProduct = await ProductModel.find({listStatus: true, deleteStatus: false,category:mensCategory[0]._id}).limit(8).populate('category')
+        console.log('3')
         const womensProduct = await ProductModel.find({listStatus:true,deleteStatus:false,category:womensCategory[0]._id}).limit(8).populate('category')
-    
+        console.log('5')
         const banner = await BannerModel.find({listStatus:true});
+
+        console.log('1')
         res.render("user/index",{products,mensProduct,womensProduct,category,banner,mensCategory,womensCategory,cartCount}); 
     }catch(error){
+        console.log(error,  'indexView')
         res.status(500).json({ status: false, error: "Something went wrong on the server." });
 
     }    
@@ -63,6 +68,7 @@ const signupView = (req,res) => {
     try{
         return res.render("user/signup");
     }catch(error){
+        console.log(error, 'signup view')
         res.status(500).json({ status: false, error: "Something went wrong on the server." });
     }
 }
@@ -169,13 +175,14 @@ const shopView = async (req,res) => {
 
 const productDetailsView = async (req,res) => {
     try{
-        const userId = req.session.user._id;
         const products = await ProductModel.aggregate([{$match:{listStatus:true,deleteStatus:false}}]).limit(4);
         const singleProduct = await ProductModel.findOne({_id:req.query.id});
-        const cartCount = await userFunc.getCartCount(userId)
-        
+
+        let cartCount = 0;
+        if(req.session.user !== undefined ) cartCount = await userFunc.getCartCount(req.session.user._id);
         return res.render("user/product-details",{singleProduct,products,cartCount});
     }catch(error){
+        console.log(error, "productDetailsView error")
         res.status(500).json({ status: false, error: "Something went wrong on the server." }); 
     }
 };
@@ -300,18 +307,17 @@ const wishlistView = async(req,res)=>{
 const loginUser = async (req,res) => {
     try{
 
-    
-        const data = {
-            email: req.body.email,
-            password: req.body.password
-        }
-        const user = await UserModel.findOne({email: req.body.email})
-        console.log(req.body.email)
-        if(req.body.email !=''|| req.body.password !=''){
+    console.log(req.body, 'login user rq.boyd')
+  
+        const {email,password} = req.body;
+        const user = await UserModel.findOne({email})
+        console.log(user, 'user')
+        console.log(email)
+        if(email !=''|| password !=''){
             if(user){
                 console.log("email matched")
                 
-                if(req.body.password === user.password){
+                if(password === user.password){
                     console.log("password matched.")
                     if(user.status == true){
                         req.session.user = user;

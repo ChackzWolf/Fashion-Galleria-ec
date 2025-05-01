@@ -19,6 +19,13 @@ app.set("view engine","hbs");
 
 
 
+
+
+
+
+
+
+
 //directory connection
 
 app.set('views', path.join(__dirname, 'views'));
@@ -83,7 +90,7 @@ hbs.registerHelper('or', function (value, ...args) {
   }
   // If no match is found, return false
   return false;
- });
+});
  
 
 app.use(function(req, res, next) {
@@ -94,19 +101,19 @@ app.use(function(req, res, next) {
 
 
 
-// app.use(nocache())
 
 //session
 app.set('trust proxy', 1) // trust first proxy
+
 app.use(session({  
     name: `daffyduck`,
     secret: 'some-secret-example',  
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: false, // This will only work if you have https enabled!
+        secure: false,
         maxAge: 60000000 // 1000 min
-    } 
+    }  
 }))
 
 connectDB()
@@ -114,11 +121,10 @@ connectDB()
 
 
 app.use("/", userRouter);
-
 app.use("/admin", adminRouter);
 
 app.listen(3000,()=> console.log("server is running"))
 
-app.get('*',function(req,res){
+app.get('*',function(_req,res){
   res.status(404).render("user/error-handling");
 })

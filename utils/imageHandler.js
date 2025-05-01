@@ -10,14 +10,18 @@ const storage = multer.diskStorage({
     },
     filename: function(req,file,callback){
         const name = Date.now()+'-'+ file.originalname;
+        console.log("📸 Saving file as:", name);
+
         callback(null,name);
     }
 })
 
-const validMimeTypes = ['image/png','image/jpeg','image/webp'];
+const validMimeTypes = ['image/png','image/jpeg','image/webp', 'image/avif'];
 
 
 const fileFilter = (req,file,callback) =>{
+    console.log("🚀 File is reaching multer fileFilter:", file.originalname, file.mimetype);
+
     if(validMimeTypes.includes(file.mimetype)){
         callback(null,true)
     }else{

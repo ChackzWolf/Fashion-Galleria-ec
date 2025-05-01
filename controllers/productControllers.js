@@ -41,13 +41,13 @@ const  addProduct = async (req,res) =>{
           
               const categoryConnect = await CategoryModel.findOne({name:req.body.category})
           
-              console.log(req.files) ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+              console.log(req.files, 'req.files') ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
               const images = req.files
                                   .filter((file) =>
-                                        file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp")
+                                        file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp" || file.mimetype === 'image/avif')
                                   .map((file) => file.filename);   
-              console.log(images)
+              console.log(images, 'req.files images')
               if(images.length ===3){
                   const data = {
                     name,
@@ -122,7 +122,7 @@ const listUnlistProduct = async(req,res)=>{
 
 const editedProductDetails = async (req,res)=>{
     const {id, name, price , description, stockLarge, stockMedium, stockSmall, categoryId } = req.body;
-    console.log(req.files,'req.filews')
+    console.log(req.files,'req.files edit product')
 
     const sizeStock = {
         sizeLarge:{
@@ -139,7 +139,7 @@ const editedProductDetails = async (req,res)=>{
   
     const images = req.files
                           .filter((file) =>
-                                file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp")
+                                file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp" || file.mimetype === 'image/avif')
                           .map((file) => file.filename);   
 
     const existingProduct = await ProductModel.findById(id);
@@ -225,7 +225,6 @@ const deleteFile = (filePath) => {
   fs.unlink(absoluteFilePath, (err) => {
       if (err) {
         console.log("error deleting file");
-          // res.status(404).render("user/error-handling");
 
       } else {
           console.log("File deleted successfully:", absoluteFilePath);

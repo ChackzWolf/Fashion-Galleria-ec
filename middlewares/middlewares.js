@@ -18,7 +18,13 @@ const adminLoginChecker = (req,res,next)=>{
 
 const userStatusCheck = async(req,res,next)=>{
     try{
-        const userId = req.session.user._id;
+        console.log('User',req.session.user)
+        if(req.session.user === undefined) return next()
+
+
+        const userId = req.session.user._id || null;
+        console.log(userId, 'userID')
+        
         const userDetails = await UserModel.findOne({_id:userId})
         if(userDetails.status == true){
             next()
@@ -26,6 +32,7 @@ const userStatusCheck = async(req,res,next)=>{
             return res.redirect("/admin/login")
         }
     }catch(error){
+        console.log(error, ' error in userStatusCheck middleware')
         res.status(500).json({error: "Failed to check permission status "});
     }
 }
@@ -48,6 +55,7 @@ const adminLoginVarify = (req,res,next) =>{
 const userLoginVarify = (req,res,next)=>{
     try{
         if(req.session.user){
+            console.log(req.session.user, 'from middle ware login verify');
             next()
         }else{
             return res.redirect('/login')

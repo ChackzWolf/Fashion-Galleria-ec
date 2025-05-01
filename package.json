@@ -22,7 +22,7 @@
     "sweetalert2": "^11.10.5"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "name": "y",
   "version": "1.0.0",
