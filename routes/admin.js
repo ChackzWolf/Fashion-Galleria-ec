@@ -1,5 +1,4 @@
 const express = require("express");
-const  adminControllers = require("../controllers/adminControllers");
 
 const authController = require("../controllers/adminControllers/auth/authController")
 const dashboardController = require("../controllers/adminControllers/dashboard/dashboardController")
@@ -11,7 +10,6 @@ const couponManagementController = require("../controllers/adminControllers/coup
 const offerManagementController = require("../controllers/adminControllers/offers/offerManagementController")
 const bannerManagementController = require("../controllers/adminControllers/banner/bannerManagementController")
 
-const productControllers = require("../controllers/productControllers")
 const {adminLoginChecker,adminLoginVarify} = require("../middlewares/middlewares");
 const { upload } = require('../utils/imageHandler')
 
@@ -37,9 +35,9 @@ router.get("/userList",adminLoginChecker, userManagementController.userList);
 //product management
 router.get("/add-Product",adminLoginChecker,productManagementController.addProductView);
 router.get("/edit-product",adminLoginChecker,productManagementController.editProductView);
-router.get("/list-unlist-product/:id",adminLoginChecker,productControllers.listUnlistProduct);
-router.get("/edit-productDetails",adminLoginChecker,productControllers.editProductDetailsView)
-router.get("/delete-product/:id",adminLoginChecker,productControllers.deleteProduct);
+router.get("/list-unlist-product/:id",adminLoginChecker,productManagementController.listUnlistProduct);
+router.get("/edit-productDetails",adminLoginChecker,productManagementController.editProductDetailsView)
+router.get("/delete-product/:id",adminLoginChecker,productManagementController.deleteProduct);
 router.get("/deleted-products",adminLoginChecker,productManagementController.deletedProductsView)
 
 //category management
@@ -90,11 +88,11 @@ router.get("/delete-banner/:id", bannerManagementController.deleteBanner);
 router.post("/loginAdmin", authController.loginAdmin);
 
 //products
-router.post("/addProduct",upload.array('image',3), productControllers.addProduct)
-router.post("/edited-productDetails",upload.array('image',3), productControllers.editedProductDetails)
+router.post("/addProduct",upload.array('image',3), productManagementController.addProduct)
+router.post("/edited-productDetails",upload.array('image',3), productManagementController.editedProductDetails)
 
 //category
-router.post("/addCategory", productControllers.addCategory)
+router.post("/addCategory", productManagementController.addCategory)
 router.post("/editCategory", categoryManagementController.editCategory)
 
 //coupon

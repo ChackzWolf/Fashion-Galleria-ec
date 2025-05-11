@@ -2,7 +2,7 @@ const CouponModel = require('../../../models/Coupon');
 
 const couponListView = async(req,res)=>{
     try{
-        const pageNum =  req.query.page;
+        const pageNum = parseInt(req.query.page) || 1;
         const perPage = 6
         let docCount
         let pages
@@ -36,7 +36,7 @@ const editCouponDetails = async(req,res)=>{
         const editCoupon = await CouponModel.findOne({_id:req.query.id});
         res.render("admin/edit-coupon-details",{editCoupon});
     }catch(error){
-
+        res.status(500).render("user/error-handling");
     }
 }
 
@@ -91,7 +91,7 @@ const deleteCoupon = async(req,res)=>{
 const addNewCoupon = async(req,res)=>{
     try{
         const {couponName,couponType,description} = req.body;
-        var percentageValue =req.body.percentageValue;
+        const percentageValue = parseFloat(req.body.percentageValue);
     
         const data = {
             couponCode:couponName,
@@ -101,10 +101,8 @@ const addNewCoupon = async(req,res)=>{
             listStatus:true
         }
     
-        console.log(typeof percentageValue,'percentageValue')
-        console.log(couponName, 'couponName')
-        if(couponName !== '' && typeof percentageValue !== String && couponType !== undefined ){
-              console.log(data,'dataaaaaa')
+        if (couponName !== '' && !isNaN(percentageValue) && couponType !== undefined){
+            console.log(data,'dataaaaaa')
               const couponExists = await CouponModel.findOne({couponCode:couponName});
               if(!couponExists){
                     console.log("coupon deos'nt exists")

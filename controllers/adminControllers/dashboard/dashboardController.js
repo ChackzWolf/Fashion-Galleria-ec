@@ -1,38 +1,40 @@
-const OrderModel = require('../../../models/Coupon')
+const OrderModel = require('../../../models/Order');
 const UserModel = require('../../../models/User');
 
 const dashboardView = async (req, res) => {
     try {
-        const pageNum =  req.query.page;
-        const perPage = 6 ;
-        let docCount
-        let pages
-        const documents = await OrderModel.countDocuments({ status: 'delivered' }).populate('userId')
+        const pageNum = parseInt(req.query.page) || 1;
+        const perPage = 6;
 
-        let TotalDeliveredAmount = 0;
-        // const recentOrders = await OrderModel.find({ status: 'delivered' })
-        const recentOrders = await OrderModel.find({ status: 'delivered' }).populate('userId').skip((pageNum - 1) * perPage).limit(perPage);
-        const countOfDeliveredOrders = await OrderModel.countDocuments({ status: 'delivered' });
+        const docCount = await OrderModel.countDocuments({ status: 'delivered' });
+        const pages = Math.ceil(docCount / perPage);
+        const countPages = Array.from({ length: pages }, (_, i) => i + 1);
+
+        const recentOrders = await OrderModel.find({ status: 'delivered' })
+            .populate('userId')
+            .skip((pageNum - 1) * perPage)
+            .limit(perPage);
+
+        const countOfDeliveredOrders = docCount;
         const countOfUsers = await UserModel.countDocuments();
-        const user = await UserModel.find({_id:recentOrders.userId});
-        let countPages = []
-        // pagination function
-        docCount = documents
-        pages = Math.ceil(docCount / perPage)
-        for (let i = 0; i < pages; i++) {
 
-            countPages[i] = i + 1
-        }
-        ///
-        recentOrders.forEach(order => {
-            TotalDeliveredAmount += order.amount;
+        const totalDeliveredAmount = Math.floor(
+            recentOrders.reduce((acc, order) => acc + order.amount, 0)
+        );
+
+        res.render("admin/index", {
+            recentOrders,
+            countOfDeliveredOrders,
+            totalDeliveredAmount,
+            countOfUsers,
+            countPages
         });
-        let totalDeliveredAmount = Math.floor(TotalDeliveredAmount);
-        res.render("admin/index", { recentOrders, countOfDeliveredOrders, totalDeliveredAmount, countOfUsers,user,countPages })
     } catch (err) {
+        console.error(err)
         res.status(500).render("user/error-handling");
     }
 }
+
 
 const adminChartLoad = async (req, res) => {
     try {

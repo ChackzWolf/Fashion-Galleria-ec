@@ -1,5 +1,9 @@
 const UserModel = require('../../../models/Product');
+const Swal = require('sweetalert2');
 
+
+
+ 
 const userList = async (req,res)=>{
     try{
          const pageNum =  req.query.page;

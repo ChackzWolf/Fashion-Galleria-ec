@@ -1,4 +1,5 @@
  const CategoryModel = require('../../../models/Category')
+ const ProductModel = require('../../../models/Product');
 
 const categoryListView = async(req,res)=>{
     try{
@@ -7,7 +8,7 @@ const categoryListView = async(req,res)=>{
         let docCount
         let pages
         const categories = await CategoryModel.find({deleteStatus:false}).skip((pageNum - 1) * perPage).limit(perPage)
-        const documents = await CategoryModel.countDocuments({deletedProducts:true});
+        const documents = await CategoryModel.countDocuments({deleteStatus: false});
         docCount = documents
         pages = Math.ceil(docCount / perPage)
 

@@ -19,13 +19,6 @@ app.set("view engine","hbs");
 
 
 
-
-
-
-
-
-
-
 //directory connection
 
 app.set('views', path.join(__dirname, 'views'));
@@ -128,3 +121,8 @@ app.listen(3000,()=> console.log("server is running"))
 app.get('*',function(_req,res){
   res.status(404).render("user/error-handling");
 })
+
+
+
+
+

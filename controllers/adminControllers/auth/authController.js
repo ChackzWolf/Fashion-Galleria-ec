@@ -1,5 +1,10 @@
+const bcrypt = require("bcryptjs/dist/bcrypt");
 const AdminModel = require("../../../models/Admin");
 
+
+
+
+ 
 const loginView = (req,res)=>{
     try{
         res.render("admin/login")
@@ -24,7 +29,7 @@ const loginAdmin = async (req,res)=>{
          const adminData = await AdminModel.findOne({adminID:req.body.adminID})
         if(req.body.adminID != ''){
             if(adminData){    
-              if(admin = req.body.password === adminData.password){ 
+              if(await bcrypt.compare(req.body.password, adminData.password)){ 
                  req.session.admin = admin; 
                  res.redirect('/admin')
               }

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const UserModel = require("./User")
 
 const OrderSchema = mongoose.Schema({
     userId:{

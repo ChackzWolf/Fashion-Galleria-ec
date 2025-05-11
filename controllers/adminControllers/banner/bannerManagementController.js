@@ -1,5 +1,11 @@
 const BannerModel = require("../../../models/Banner");
+const fileHandler = require("../../../utils/files"); // or correct path where deleteFile() is defined
 
+
+
+
+
+ 
 const mainBannerView = async(req,res)=>{
     try{
         const banner = await BannerModel.findOne()
