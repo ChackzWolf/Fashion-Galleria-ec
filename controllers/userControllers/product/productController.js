@@ -1,6 +1,6 @@
 const ProductModel = require("../../../models/Product");
 const CategoryModel = require("../../../models/Category");
-
+const userHelper = require("../../../utils/userHelpers")
 const productList= (req,res) =>{
     try{
         res.render("user/product-list")
@@ -17,7 +17,7 @@ const productDetailsView = async (req,res) => {
         const singleProduct = await ProductModel.findOne({_id:req.query.id});
 
         let cartCount = 0;
-        if(req.session.user !== undefined ) cartCount = await userFunc.getCartCount(req.session.user._id);
+        if(req.session.user !== undefined ) cartCount = await userHelper.getCartCount(req.session.user._id);
         return res.render("user/product-details",{singleProduct,products,cartCount});
     }catch(error){
         console.log(error, "productDetailsView error")

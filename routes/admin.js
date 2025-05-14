@@ -85,6 +85,11 @@ router.get("/delete-banner/:id", bannerManagementController.deleteBanner);
  /////////////////////////////////////////////////////////////////////////////////////////////
 //------------------------------------post methods-----------------------------------------//
 
+
+// router.post('/loginAdmin', (req, res) => {
+//   res.send('This is just a GET request to /admin/loginAdmin for testing');
+// });
+
 router.post("/loginAdmin", authController.loginAdmin);
 
 //products

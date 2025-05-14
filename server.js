@@ -116,13 +116,8 @@ connectDB()
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
 
-app.listen(3000,()=> console.log("server is running"))
-
-app.get('*',function(_req,res){
-  res.status(404).render("user/error-handling");
-})
+const port = 3000;
+app.listen(port, '0.0.0.0', () => console.log("server is running on port ", port));
 
 
-
-
-
+ 

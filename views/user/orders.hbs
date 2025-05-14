@@ -37,6 +37,90 @@
   <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
   <link rel="stylesheet" href="css/style.css" type="text/css">
 
+{{!-- sidebarstyle --}}
+
+  <!-- Template Main CSS File -->
+  <link href="assetsAdmin/css/style.css" rel="stylesheet">
+  <!-- Google Font -->
+
+  <link rel="stylesheet" href="assets/css/templatemo-hexashop.css">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+{{!-- 
+side bar style --}}
+
+  <style>
+    /* Style the dropdown container */
+    .user-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Style the button that will open the dropdown */
+    .user-btn {
+      background-color: #ffffff;
+      color: rgb(31, 30, 30);
+      padding: 10px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Style the dropdown content (hidden by default) */
+    .user-dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #ffffff;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+
+      width: max-content;
+      right: 0;
+    }
+
+    /* Style the individual items in the dropdown */
+    .user-dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* Change color on hover */
+    .user-dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    /* Show the dropdown when hovering over the container */
+    .user-dropdown:hover .user-dropdown-content {
+      display: block;
+    }
+
+    .sidebar {
+      float: left;
+      /* Float the sidebar to the left */
+      width: 250px;
+      /* Adjust width as needed */
+    }
+
+    .main-content {
+      margin-left: 270px;
+      /* Adjust margin to accommodate sidebar width and some space */
+      /* Add any other styling for the main content */
+    }
+
+    .footer {
+      clear: both;
+      /* Clear any floats */
+      margin-top: 20px;
+      /* Adjust margin to create space between the main content and footer */
+      /* Add any other styling for the footer */
+    }
+
+    /* Add any other styling for the footer */
+  </style>
 
       <style>
         /* Style the dropdown container */
@@ -244,6 +328,83 @@
     <!-- Header Section End -->
 
 
+
+ <!-- ======= Sidebar ======= -->
+  <div id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" style="padding-top: 50px;" id="sidebar-nav">
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <span>Home</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed " href="/user-profile">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link " href="/orders">
+          <i class="bi bi-grid"></i>
+          <span>Orders</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/wallet-history">
+          <i class="fa-solid fa-wallet"></i> <span>Wallet History</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+
+
+      {{!-- <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link collapsed" href="/orders">
+              <i class="bi bi-grid"></i>
+              <span>Orders</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" href="/orders">
+              <i class="bi bi-grid"></i>
+              <span>Returned or Cancelled</span>
+            </a>
+          </li>
+
+
+        </ul>
+      </li>
+      <!-- End Forms Nav --> --}}
+
+
+
+
+    </ul>
+
+  </div><!-- End Sidebar-->
+
+
+
+
+
+
+  <main id="main" class="main">
+    <!-- Modal -->
+
+
+
   <!-- Breadcrumb Begin -->
   <div class="breadcrumb-option">
     <div class="container">
@@ -258,15 +419,6 @@
     </div>
   </div>
   <!-- Breadcrumb End -->
-
-
-
-  <main id="main" class="main">
-    <!-- Modal -->
-
-
-
-
 
 
     <section class="section">

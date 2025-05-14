@@ -26,19 +26,20 @@ const adminLogout = (req,res)=>{
 
 const loginAdmin = async (req,res)=>{
     try{
+        const {password, adminID} = req.body
          const adminData = await AdminModel.findOne({adminID:req.body.adminID})
-        if(req.body.adminID != ''){
+        if(adminID != ''){
             if(adminData){    
-              if(await bcrypt.compare(req.body.password, adminData.password)){ 
-                 req.session.admin = admin; 
+              if(password === adminData.password){ 
+                 req.session.admin = adminData; 
                  res.redirect('/admin')
               }
               else{
                 const failedPassword = true;
                 res.redirect(`/admin/login?failedPassword=${failedPassword}`)
-                console.log("Password not matching.")
               }
            }else{
+            console.log('email faild')
                 const failedEmail = true 
                 res.redirect(`/admin/login?failedEmail=${failedEmail}`);
                 console.log("email is not matching.")
@@ -49,6 +50,7 @@ const loginAdmin = async (req,res)=>{
             console.log("Field is empty");
         }
     }catch(error){
+        console.log(error)
         res.status(500).render("user/error-handling"); 
     }
 }

@@ -1,7 +1,7 @@
 const CartModel = require("../../../models/Cart");
 const CouponModel = require("../../../models/Coupon");
-
-
+const ProductModel = require("../../../models/Product");
+const userHelper = require("../../../utils/userHelpers");
 
 const cartView = async(req,res) =>{
    try{
@@ -12,12 +12,12 @@ const cartView = async(req,res) =>{
 
         if(cartExists){
 
-            cartItems = await userFunc.getProducts(userId);
+            cartItems = await userHelper.getProducts(userId);
             console.log(cartItems,'cartItems')
-            let total = await userFunc.getTotalAmount(userId);       
+            let total = await userHelper.getTotalAmount(userId);       
             total = total[0]?total[0].total:0;
             console.log('cartItems',cartItems)
-            const cartCount = await userFunc.getCartCount(userId)
+            const cartCount = await userHelper.getCartCount(userId)
             res.render("user/cart",{cartItems,total,stockLimit,cartCount});
         }else{
             console.log('reached else')
@@ -27,7 +27,7 @@ const cartView = async(req,res) =>{
             };
             cartItems = await CartModel.create(data);
             console.log('cartItems',cartItems)
-            const cartCount = await userFunc.getCartCount(userId)
+            const cartCount = await userHelper.getCartCount(userId)
             res.render("user/cart",{cartItems,stockLimit,cartCount});
         }
         console.log(cartItems,'cartitems')
@@ -94,15 +94,15 @@ const  addToCart = async(req,res)=>{
                     );
 
                     const addedToCart = true
-                    const cartCount = await userFunc.getCartCount(userId)
+                    const cartCount = await userHelper.getCartCount(userId)
                     return res.render("user/product-details",{singleProduct,products,cartCount,addedToCart}); 
                 }else{
-                    const cartCount = await userFunc.getCartCount(userId)
+                    const cartCount = await userHelper.getCartCount(userId)
                     let stockLimit = true;
                     return res.render("user/product-details",{singleProduct,products,cartCount,stockLimit});
                 }
             }else{
-                const cartCount = await userFunc.getCartCount(userId)
+                const cartCount = await userHelper.getCartCount(userId)
                 await CartModel.updateOne({userId:userId},{$push:{cart:{productId,count:quantity,size}}})
                 const addedToCart = true
                 return res.render("user/product-details",{singleProduct,products,cartCount,addedToCart});
@@ -177,7 +177,7 @@ const changeProductQuantity = async (req, res) => {
 
                 if (updated) {
                     const userId = req.session.user._id;
-                    let total = await userFunc.getTotalAmount(userId);
+                    let total = await userHelper.getTotalAmount(userId);
                     response = {status: true, total};
                 } else {
                     response = {status: false};

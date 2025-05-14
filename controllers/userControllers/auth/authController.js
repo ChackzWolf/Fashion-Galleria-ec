@@ -3,6 +3,7 @@ const saltRounds = 10;
 const UserModel = require("../../../models/User");
 const session = require("express-session");
 const sendMail = require("../../../utils/nodeMailer");
+const userHelper = require("../../../utils/userHelpers")
 const { sendMessage } = require("fast-two-sms");
 
 
@@ -61,10 +62,10 @@ const loginUser = async (req,res) => {
 const signupUser  = async (req,res) =>{
     try{
         const {name,email,number,password,referenceId}= req.body;
-        const isPasswordValid = userFunc.validatePassword(password);
-        const isNameValid = userFunc.validateName(name);
-        const isEmailValid = userFunc.validateEmail(email);
-        const isNumberValid = userFunc.validatePhoneNumber(number);
+        const isPasswordValid = userHelper.validatePassword(password);
+        const isNameValid = userHelper.validateName(name);
+        const isEmailValid = userHelper.validateEmail(email);
+        const isNumberValid = userHelper.validatePhoneNumber(number);
         if(isEmailValid){
             if(isPasswordValid.length < 1 && isNumberValid.length < 1 && isNameValid.length < 1){
                 const currentDate = new Date();
@@ -73,7 +74,7 @@ const signupUser  = async (req,res) =>{
                 let wallet = 50;
                 let walletHistory=[{transaction:'credited',amount:50,orderId:'Joining bonus',date:formattedDate}];
                 if(referenceId){
-                    var referralOffer = await userFunc.referenceIdApplyOffer(referenceId);
+                    var referralOffer = await userHelper.referenceIdApplyOffer(referenceId);
                     if(referralOffer){
                         wallet = wallet+100
                         const dataHistory = {
@@ -102,7 +103,7 @@ const signupUser  = async (req,res) =>{
                             status: true,
                             wallet:wallet,
                             walletHistory:walletHistory,
-                            referenceId: userFunc.generateRandomReferenceId()
+                            referenceId: userHelper.generateRandomReferenceId()
                         }
                         // data.password = await bcrypt.hash(data.password,saltRound)
                         // await UserModel.insertMany([data])
@@ -237,7 +238,7 @@ const createNewPasswrod = async(req,res)=>{ // for forgot password
     // try{
 
         const {newPassword,renewPassword} = req.body;
-        const isPasswordValid = userFunc.validatePassword(newPassword);
+        const isPasswordValid = userHelper.validatePassword(newPassword);
 
         if(newPassword === renewPassword){
     
@@ -277,7 +278,7 @@ const changePassword = async (req, res) => { // changing existing password from 
         const currentPasswordT = currentPassword.trim();
         const userPassword = userDetails.password.trim()
         const checkPassword = await bcrypt.compare(currentPasswordT,userPassword);
-        const isPasswordValid = userFunc.validatePassword(newPassword)
+        const isPasswordValid = userHelper.validatePassword(newPassword)
         if(newPassword === renewPassword){
             if (checkPassword) {
                 if(isPasswordValid){

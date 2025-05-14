@@ -78,7 +78,7 @@ router.post("/edit-profile",userLoginVarify,profileController.editProfile);
 router.post("/change-password",userLoginVarify,authController.changePassword);
 router.post("/place-order",userLoginVarify,orderController.placeOrder);
 router.post("/email-verify-otp",authController.emailVerifyOtp);
-router.post("/changePassword",authController.createNewPasswrod);
+router.post("/changePassword",authController.createNewPasswrod); 
 router.post("/otp-verify-passwordChange",authController.otpVerificationPassword);
 router.post("/verify-payment",orderController.verifyPayment);
 router.post("/add-new-address-checkout",profileController.addNewAddressCheckout);

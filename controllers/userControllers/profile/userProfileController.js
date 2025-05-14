@@ -1,6 +1,6 @@
 const UserModel = require("../../../models/User");
 const AddressModel = require("../../../models/Address");
-
+const userHelper = require("../../../utils/userHelpers")
 
 
 const userProfile = async(req,res)=>{
@@ -10,7 +10,7 @@ const userProfile = async(req,res)=>{
         const userDetails = await UserModel.findById({_id:userId});
         const newAddress = await AddressModel.findOne({userId:userId});
         // if(newAddress){
-            const cartCount = await userFunc.getCartCount(userId);
+            const cartCount = await userHelper.getCartCount(userId);
             res.render('user/user-profile',{userDetails,newAddress,cartCount});
         // }
      } catch (error) {
@@ -26,9 +26,9 @@ const editProfile = async(req,res)=>{
         const userId = req.session.user._id;
         const {name,email,number} = req.body;
         console.log(name,'name');
-        const isNameValid = userFunc.validateName(name);
-        const isEmailValid = userFunc.validateEmail(email);
-        const isNumberValid = userFunc.validatePhoneNumber(number);
+        const isNameValid = userHelper.validateName(name);
+        const isEmailValid = userHelper.validateEmail(email);
+        const isNumberValid = userHelper.validatePhoneNumber(number);
         const userDetails = await UserModel.findOne({_id:userId});
         const newAddress = await AddressModel.findOne({userId:userId});
         console.log(isNameValid,'is name valid');
@@ -74,9 +74,9 @@ const addNewAddress = async(req,res)=>{
         const userId = req.session.user._id
         const userDetails = await UserModel.findById({_id:userId});
         const newAddress = await AddressModel.findOne({userId:userId})
-        const validation = userFunc.detailsValidation(details);
+        const validation = userHelper.detailsValidation(details);
         if(validation.length<5){
-            const updateAddress = await userFunc.newAddressManagement(details,userId);
+            const updateAddress = await userHelper.newAddressManagement(details,userId);
             console.log('update address 1', updateAddress)
             if(updateAddress){
                 const newAddress = await AddressModel.findOne({userId:userId});
@@ -107,16 +107,16 @@ const addNewAddressCheckout = async(req,res)=>{
         console.log(details,'detailss');
         
         console.log('update address 1', updateAddress)
-        const cartItems = await userFunc.getProducts(userId);
+        const cartItems = await userHelper.getProducts(userId);
         const newAddress = await AddressModel.findOne({userId:userId});
         const userDetails = await UserModel.findById({_id:userId});
         const coupons = await CouponModel.find();  
-        const validation = await userFunc.detailsValidation(details);
-        let total = await userFunc.getTotalAmount(userId)
+        const validation = await userHelper.detailsValidation(details);
+        let total = await userHelper.getTotalAmount(userId)
         total = total[0] ? total[0].total : 0;
 
         if(validation.length <5){
-            const updateAddress = await userFunc.newAddressManagement(details,userId);
+            const updateAddress = await userHelper.newAddressManagement(details,userId);
             if(updateAddress){
                 mesgAddressNew = true;
                 res.render("user/checkout",{mesgAddressNew, userDetails, newAddress,total,coupons,cartItems});
@@ -143,7 +143,7 @@ const removeAddress = async (req,res)=>{
         const addressId = req.query.id;
         const userId = req.session.user._id;
         console.log('kkkkkkkkkkkkkkk')
-        const cartCount = await userFunc.getCartCount(userId);
+        const cartCount = await userHelper.getCartCount(userId);
 
         const removeAddress = await AddressModel.updateOne({userId:userId},{$pull:{address:{_id:addressId}}});
         console.log(removeAddress,'kkkkkkkkkkkkkkk')
@@ -172,7 +172,7 @@ const removeAddressCheckout = async (req,res)=>{
     try{
         const userId = req.session.user._id;
         const coupons = await CouponModel.find();  
-        let total = await userFunc.getTotalAmount(userId)
+        let total = await userHelper.getTotalAmount(userId)
         total = total[0] ? total[0].total : 0;
         const addressId = req.query.id;
         const removeAddress = await AddressModel.updateOne({userId:userId},{$pull:{address:{_id:addressId}}});
@@ -202,7 +202,7 @@ const defaultAddress = async (req,res)=>{
         const userId = req.session.user._id;
         const addressId = req.query.id;
         const defaultAddress = await AddressModel.updateOne({'address._id':addressId},{$set:{"address.$.default":true}});
-        const cartCount = await userFunc.getCartCount(userId);
+        const cartCount = await userHelper.getCartCount(userId);
         // setting current address to  not default;
         await AddressModel.updateOne({"address.default":true},{$set:{"address.$.default":false}});
 

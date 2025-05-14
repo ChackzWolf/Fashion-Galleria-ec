@@ -1,7 +1,7 @@
 const BannerModel = require("../../../models/Banner");
 const CategoryModel = require("../../../models/Category");
 const ProductModel = require('../../../models/Product')
-
+const userHelper = require("../../../utils/userHelpers");
 
 const indexView = async (req,res) => {
     try{
@@ -9,7 +9,7 @@ const indexView = async (req,res) => {
         const mensCategory = await CategoryModel.find({_id:'65996c9ed92f9b905b20f697'});// hardcoding 
         const womensCategory = await CategoryModel.find({_id:'65996cabd92f9b905b20f69d'});// hardcoding 
         let cartCount = 0;
-        if(req.session.user !== undefined ) cartCount = await userFunc.getCartCount(req.session.user._id);
+        if(req.session.user !== undefined ) cartCount = await userHelper.getCartCount(req.session.user._id);
         console.log(cartCount, 'cart count')
        
 
@@ -38,7 +38,7 @@ const indexView = async (req,res) => {
 const blogView = async(req,res)=> {
     try{
         const userId = req.session.user._id;
-        const cartCount = await userFunc.getCartCount(userId)
+        const cartCount = await userHelper.getCartCount(userId)
 
         return res.render("user/blog",{cartCount});
     }catch(error){

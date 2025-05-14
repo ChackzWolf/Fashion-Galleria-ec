@@ -15,6 +15,7 @@ var instance = new Razorpay({
 
 const generateRazorpay = async (randomOrderId, finalAmount) => {
     try {
+      console.log('triggered in generate razopay')
         const order = await instance.orders.create({
           amount: finalAmount * 100,
           currency: "INR",

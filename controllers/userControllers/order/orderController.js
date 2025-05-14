@@ -1,5 +1,9 @@
 const OrderModel = require("../../../models/Order");
+const UserModel = require('../../../models/User');
+const CouponModel = require('../../../models/Coupon')
+const AddressModel = require('../../../models/Address')
 const Razorpay = require("razorpay");
+const userHelper = require("../../../utils/userHelpers");
 const generateRandomOrderId = require("../../../utils/orderIdGenerator");
 const formatDate = require("../../../utils/dateGenerator");
 const moment = require("moment");
@@ -11,8 +15,8 @@ const checkout = async(req,res)=>{
         const userDetails = await UserModel.findById({_id:userId})
         const newAddress = await AddressModel.findOne({userId:userId})
         const coupons = await CouponModel.find();
-        const cartItems = await userFunc.getProducts(userId);
-        let total = await userFunc.getTotalAmount(userId)
+        const cartItems = await userHelper.getProducts(userId);
+        let total = await userHelper.getTotalAmount(userId)
         total = total[0] ? total[0].total : 0;
 
         res.render("user/checkout",{newAddress,userDetails,total,coupons,cartItems});
@@ -39,7 +43,7 @@ const checkout = async(req,res)=>{
         console.log('userAddress',userAddress) 
         const address = userAddress.address.find(address => address._id.equals(selectedAddressId));
 
-        const cartItems = await userFunc.getProducts(userId);
+        const cartItems = await userHelper.getProducts(userId);
 
         // const products = cartItems.map(({ product, count, size }) => ({
         //     productId: product._id,
@@ -83,7 +87,7 @@ const checkout = async(req,res)=>{
         const order = await OrderModel.create(data)
         if(order){
             if(req.body.paymentMethod == 'Wallet'){
-                let stockUpdate = userFunc.stockQuantityUpdate();
+                let stockUpdate = userHelper.stockQuantityUpdate();
                 if(stockUpdate){
                     await UserModel.updateOne({_id:userId},{$inc:{wallet: -finalAmount}})
                     await UserModel.updateOne({_id:userId},{$push:{walletHistory:transaction}})
@@ -105,7 +109,7 @@ const checkout = async(req,res)=>{
                 console.log(response)
                 res.json(response);
             }else{
-                let stockUpdate = userFunc.stockQuantityUpdate();
+                let stockUpdate = userHelper.stockQuantityUpdate();
                 if(stockUpdate){
                     const pendingOrders = await OrderModel.findOne({orderId:order.orderId});
                     console.log("pending order//:",pendingOrders)
@@ -128,14 +132,14 @@ const checkout = async(req,res)=>{
 
 const verifyPayment = async (req,res)=>{
     try{
-        const verificationSuccess = await userFunc.paymentVarification(req.body);
+        const verificationSuccess = await userHelper.paymentVarification(req.body);
         let response;
         console.log(verificationSuccess)
         if(verificationSuccess){
-            const success = await userFunc.changePaymentStatus(req.body['order[receipt]'])
+            const success = await userHelper.changePaymentStatus(req.body['order[receipt]'])
             if(success){
                 const onlineDetails  = await OrderModel.findOne({ orderId: req.body['order[receipt]'] })
-                const stockUpdate = await userFunc.stockQuantityUpdate()
+                const stockUpdate = await userHelper.stockQuantityUpdate()
                 if(stockUpdate){
                     console.log('stock updated')
                     response = {status:true,onlineDetails}
@@ -158,7 +162,7 @@ const ordersView =  async(req,res) =>{
     try{
         const userId = req.session.user._id
         const pendingOrders = await OrderModel.find({userId:userId}).sort({$natural: -1});
-        const cartCount = await userFunc.getCartCount(userId)
+        const cartCount = await userHelper.getCartCount(userId)
         res.render('user/orders',{pendingOrders,cartCount});
         
     } catch (error) {
@@ -200,7 +204,7 @@ const transactionOrderDetailView = async(req,res)=>{
     try{
         const orderId = req.query.id;
         const orderDetails = await OrderModel.findOne({orderId:orderId});
-        const cartCount = await userFunc.getCartCount(userId);
+        const cartCount = await userHelper.getCartCount(userId);
 
         if(!orderDetails){
           return res.ststus(404).json({message:'Order not found.'});
@@ -236,7 +240,7 @@ const cancelUserOrder = async(req,res)=>{
         const userId = req.session.user._id;
         const orderId = req.query.id; // this is Id of order doc
         const productId = req.query.pro_Id;// this is the Id of product Array in the Order
-        const cartCount = await userFunc.getCartCount(userId)
+        const cartCount = await userHelper.getCartCount(userId)
         console.log(orderId,'orderId')
         console.log(productId,'productId');
 
@@ -301,7 +305,7 @@ const returnUserOrder = async(req,res)=>{
         const orderId = req.query.orderId;
         const productId =req.query.pro_id;    
         const returnType = req.query.returnType;
-        const cartCount = await userFunc.getCartCount(userId)
+        const cartCount = await userHelper.getCartCount(userId)
         console.log(orderId,'orderId')
         console.log(productId,'productId');
 
